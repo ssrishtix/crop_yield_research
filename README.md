@@ -179,6 +179,9 @@ python profit_estimator.py
 python yield_data.py
 python weather_download.py
 python soil_download.py
+
+# Independent — Build CNN-LSTM-ready aligned dataset + sliding-window features
+python temporal_alignment.py
 ```
 
 ---
@@ -195,6 +198,9 @@ python soil_download.py
 | `yield_records.csv`          | TNAU yield + revenue + profit dataset         |
 | `erode_weather.csv`          | Historical daily weather for Erode            |
 | `salem_weather.csv`          | Historical daily weather for Salem            |
+| `erode_turmeric_aligned.csv`| Full daily aligned data for Erode/Turmeric  |
+| `salem_tapioca_aligned.csv`| Full daily aligned data for Salem/Tapioca   |
+| `feature_matrix.csv`        | 30-day sliding-window feature matrix + `split`|
 | `modal_price_comparison.png` | Dual-axis price comparison chart              |
 | `turmeric_price_forecast.png`| ARIMA forecast visualisation (2-panel)        |
 | `turmeric_profit_forecast.png`| Profit estimation plot with CI band          |
