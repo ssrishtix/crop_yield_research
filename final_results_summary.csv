@@ -1,0 +1,10 @@
+metric,value
+ARIMA 30-day Forecast MAPE (%),5.2
+ARIMA 30-day Forecast MAE (Rs/q),632.02
+RF Yield Prediction MAE (kg/ha),126.79
+RF Yield Prediction MAPE (%),1.56
+Informed Selling Gain (Rs/q),1492.58
+Informed Selling Gain (%),22.16
+Best Selling Month (Turmeric),Apr
+Worst Selling Month (Turmeric),Jul
+Mean Annual Price Spread (Rs/q),-25.51

@@ -1,0 +1,25 @@
+crop,month,month_name,avg_price,season
+Erode Turmeric,1,Jan,7187.72,Rabi
+Erode Turmeric,2,Feb,7541.9,Rabi
+Erode Turmeric,3,Mar,8098.42,Summer
+Erode Turmeric,4,Apr,8228.85,Summer
+Erode Turmeric,5,May,7961.43,Summer
+Erode Turmeric,6,Jun,7349.47,Kharif
+Erode Turmeric,7,Jul,6736.27,Kharif
+Erode Turmeric,8,Aug,7108.26,Kharif
+Erode Turmeric,9,Sep,6993.36,Kharif
+Erode Turmeric,10,Oct,7118.21,Rabi
+Erode Turmeric,11,Nov,7343.51,Rabi
+Erode Turmeric,12,Dec,7312.92,Rabi
+Salem Tapioca,1,Jan,1456.03,Rabi
+Salem Tapioca,2,Feb,1413.44,Rabi
+Salem Tapioca,3,Mar,2024.84,Summer
+Salem Tapioca,4,Apr,1635.04,Summer
+Salem Tapioca,5,May,1427.04,Summer
+Salem Tapioca,6,Jun,1424.42,Kharif
+Salem Tapioca,7,Jul,1961.91,Kharif
+Salem Tapioca,8,Aug,2088.67,Kharif
+Salem Tapioca,9,Sep,2276.63,Kharif
+Salem Tapioca,10,Oct,2251.32,Rabi
+Salem Tapioca,11,Nov,1875.84,Rabi
+Salem Tapioca,12,Dec,1723.38,Rabi

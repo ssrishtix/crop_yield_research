@@ -1,0 +1,16 @@
+LSTM 30-Day Price Forecast Summary
+==================================================
+
+Model: LSTM (2-layer, 64 hidden, dropout=0.2)
+Lookback: 60 days
+Target: Mean modal_price over next 30 days
+
+Input window: last 60 days ending 2024-06-18
+Forecast period: 2024-06-19 to 2024-07-18
+
+Predicted 30-day average price: 6391.85 Rs/quintal
+
+Test Set Metrics:
+  MAE:  6857.25 Rs/quintal
+  MAPE: 51.43%
+  RMSE: 6933.49 Rs/quintal

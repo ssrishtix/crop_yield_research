@@ -1,0 +1,5 @@
+variant,features_used,n_features,RMSE,R2,delta_RMSE_vs_full
+Full Model,"horizon_weeks, year, price_mean, price_std, price_min, price_max, price_trend, rolling_avg_7d_mean, rolling_avg_30d_mean, price_volatility_mean, rainfall_total, evapotranspiration_total",12,280.62,-40.6147,0.0
+Price Only,"horizon_weeks, year, price_mean, price_std, price_min, price_max, price_trend, rolling_avg_7d_mean, rolling_avg_30d_mean, price_volatility_mean",10,281.34,-40.8285,0.72
+Weather Only,"horizon_weeks, year, rainfall_total, evapotranspiration_total",4,84.46,-2.7699,-196.16
+Baseline (no price/weather),"horizon_weeks, year",2,82.73,-2.6172,-197.88

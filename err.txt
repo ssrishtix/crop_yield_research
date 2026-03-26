@@ -1,0 +1,45 @@
+﻿python : Traceback 
+(most recent call 
+last):
+At line:1 char:1
++ python -c "
++ ~~~~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Traceba   
+ ck (most recent     
+call last)::Stri    
+ng) [], RemoteEx    
+ception
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  File "<string>", 
+line 4, in <module>
+    exec(open('resear
+ch_analysis.py').read
+())
+         ~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+^^
+  File "C:\Users\sris
+h\AppData\Local\Progr
+ams\Python\Python313\
+Lib\encodings\cp1252.
+py", line 23, in 
+decode
+    return codecs.cha
+rmap_decode(input,sel
+f.errors,decoding_tab
+le)[0]
+           ~~~~~~~~~~
+~~~~~~~~~~~^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+^^^
+UnicodeDecodeError: 
+'charmap' codec 
+can't decode byte 
+0x90 in position 
+13264: character 
+maps to <undefined>
