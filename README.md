@@ -17,6 +17,11 @@ This project builds an end-to-end data science pipeline for predicting crop yiel
 | `yield_data.py`           | Yield dataset builder from data.gov.in API + TNAU published stats  |
 | `weather_download.py`     | Historical weather data downloader (Open-Meteo Archive API)        |
 | `soil_download.py`        | Soil property data downloader (ISRIC SoilGrids REST API)           |
+| `temporal_alignment.py`   | Aligns price, weather, and soil data daily                         |
+| `build_feature_matrix.py` | Builds an advanced sliding-window feature matrix                   |
+| `lstm_price_model.py`     | Deep learning (LSTM) price prediction model                        |
+| `yield_model_rf.py`       | ML (Random Forest) models for per-crop yield prediction            |
+| `research_analysis.py`    | Comprehensive research validation and analysis pipeline            |
 
 ---
 
@@ -138,6 +143,47 @@ Downloads soil property data from the **ISRIC SoilGrids REST API** (free, no key
 
 ---
 
+### `temporal_alignment.py` & `build_feature_matrix.py`
+
+Aligns daily price, historical weather, and static soil data into a unified dataset, then generates a sliding-window feature matrix.
+
+**Features computed:**
+- Rolling weather stats (temperature, rainfall, humidity, evapotranspiration)
+- Price trend and volatility indices
+- Yield matched by year and district
+
+**Outputs:** `erode_turmeric_aligned.csv`, `salem_tapioca_aligned.csv`, `feature_matrix.csv`, `feature_matrix_weekly.csv`
+
+---
+
+### `lstm_price_model.py`
+
+Trains a Deep Learning LSTM Network to predict the 30-day average modal price based on a 60-day historical lookback window.
+
+**Outputs:** `lstm_best_model.pth`, `lstm_training_loss.png`, `lstm_test_eval.png`, `lstm_forecast_summary.txt`
+
+---
+
+### `yield_model_rf.py`
+
+Trains per-crop Random Forest Regressors to predict crop yields from the pre-computed feature matrix, supporting multiple forecast horizons (4, 8, 12 weeks).
+
+**Outputs:** `rf_feature_importance.png`, `rf_yield_predictions.csv`
+
+---
+
+### `research_analysis.py`
+
+Executes the holistic validation pipeline encompassing four distinct studies:
+1. **Ablation Study**: Evaluates the importance of feature subsets (price vs. weather).
+2. **Price Spread**: Analyzes 12-year historical spread patterns.
+3. **Seasonal Pattern**: Identifies optimal selling months for profitability gains.
+4. **Summary**: Consolidates ARIMA, LSTM, and RF performance metrics.
+
+**Outputs:** `ablation_results.csv`, `price_spread_summary.csv`, `yoy_price_change.png`, `seasonal_analysis.csv`, `final_results_summary.csv`, `research_summary.txt`, etc.
+
+---
+
 ## 📊 Data Sources
 
 | Source          | Data Type           | Access                        |
@@ -180,8 +226,16 @@ python yield_data.py
 python weather_download.py
 python soil_download.py
 
-# Independent — Build CNN-LSTM-ready aligned dataset + sliding-window features
+# Step 5 — Temporal alignment and Feature Matrix building
 python temporal_alignment.py
+python build_feature_matrix.py
+
+# Step 6 — Train ML models (LSTM for Price, Random Forest for Yield)
+python lstm_price_model.py
+python yield_model_rf.py
+
+# Step 7 — Holistic Research Analysis Pipeline
+python research_analysis.py
 ```
 
 ---
@@ -200,10 +254,26 @@ python temporal_alignment.py
 | `salem_weather.csv`          | Historical daily weather for Salem            |
 | `erode_turmeric_aligned.csv`| Full daily aligned data for Erode/Turmeric  |
 | `salem_tapioca_aligned.csv`| Full daily aligned data for Salem/Tapioca   |
-| `feature_matrix.csv`        | 30-day sliding-window feature matrix + `split`|
-| `modal_price_comparison.png` | Dual-axis price comparison chart              |
+| `feature_matrix.csv`        | Sliding-window feature matrix                 |
+| `feature_matrix_weekly.csv` | Weekly sliding-window feature matrix          |
+| `lstm_best_model.pth`       | PyTorch LSTM trained model weights            |
+| `lstm_forecast_summary.txt` | LSTM 30-day price prediction text report      |
+| `rf_yield_predictions.csv`  | Predicted vs actual yield for all horizons    |
+| `research_summary.txt`      | Plain-English research pipeline summary       |
+| `ablation_results.csv`      | Ablation study results (RMSE, R²)             |
+| `price_spread_summary.csv`  | Monthly average spread summary                |
+| `seasonal_analysis.csv`     | Seasonal price patterns per crop              |
+| `final_results_summary.csv` | Consolidated core performance metrics         |
+| `modal_price_comparison.png`| Dual-axis price comparison chart              |
 | `turmeric_price_forecast.png`| ARIMA forecast visualisation (2-panel)        |
 | `turmeric_profit_forecast.png`| Profit estimation plot with CI band          |
+| `lstm_training_loss.png`    | LSTM training vs validation loss curve        |
+| `lstm_test_eval.png`        | LSTM test evaluation chart                    |
+| `rf_feature_importance.png` | Random Forest feature importance bar chart    |
+| `ablation_chart.png`        | Model ablation study comparison graph         |
+| `price_spread_analysis.png` | Dual-axis price spread over 12 years          |
+| `yoy_price_change.png`      | Year-over-Year price change bar chart         |
+| `seasonal_price_pattern.png`| Seasonal monthly box plot distributions       |
 
 ---
 
@@ -212,6 +282,8 @@ python temporal_alignment.py
 - **Python 3.x**
 - **pandas** — data manipulation and cleaning
 - **matplotlib** — visualisation and charts
+- **scikit-learn** — Random forest and modeling metrics
+- **torch (PyTorch)** — LSTM deep learning
 - **statsmodels** — ARIMA time-series modelling
 - **requests** — API data downloads
 - **openmeteo-requests** — Open-Meteo API client
