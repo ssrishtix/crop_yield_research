@@ -22,6 +22,8 @@ This project builds an end-to-end data science pipeline for predicting crop yiel
 | `lstm_price_model.py`     | Deep learning (LSTM) price prediction model                        |
 | `yield_model_rf.py`       | ML (Random Forest) models for per-crop yield prediction            |
 | `research_analysis.py`    | Comprehensive research validation and analysis pipeline            |
+| `plot_confusion_matrix.py`| Discretizes regression outputs into a visual classification matrix |
+| `dashboard/`              | Production-ready HTML/CSS UI interface for agricultural analytics  |
 
 ---
 
@@ -184,6 +186,14 @@ Executes the holistic validation pipeline encompassing four distinct studies:
 
 ---
 
+### `plot_confusion_matrix.py`
+
+Translates the continuous continuous Random Forest yield predictions into a real-world binary classification problem ("Above Average" vs "Below Average" crop yield) and plots a 2x2 confusion matrix to easily visualize predicted success vs actual harvest.
+
+**Outputs:** `yield_confusion_matrix.png`
+
+---
+
 ## 📊 Data Sources
 
 | Source          | Data Type           | Access                        |
@@ -236,6 +246,24 @@ python yield_model_rf.py
 
 # Step 7 — Holistic Research Analysis Pipeline
 python research_analysis.py
+
+# Step 8 — Generate Classification Visuals
+python plot_confusion_matrix.py
+```
+
+### Step 9 — View the Analytics Dashboard (UI)
+The project includes a fully responsive frontend to visually present the models, forecasts, and profitability metrics to end-users (farmers/researchers).
+
+To open the website, simply launch the main HTML file in any modern web browser:
+```bash
+# On Windows
+start dashboard\index.html
+
+# On macOS
+open dashboard/index.html
+
+# On Linux
+xdg-open dashboard/index.html
 ```
 
 ---
@@ -274,6 +302,7 @@ python research_analysis.py
 | `price_spread_analysis.png` | Dual-axis price spread over 12 years          |
 | `yoy_price_change.png`      | Year-over-Year price change bar chart         |
 | `seasonal_price_pattern.png`| Seasonal monthly box plot distributions       |
+| `yield_confusion_matrix.png`| Regression outputs discretized into a 2x2 grid|
 
 ---
 
