@@ -5,28 +5,31 @@ RESEARCH SUMMARY — Crop Yield Prediction & Price Forecasting
 1. PRICE FORECASTING (ARIMA)
    The ARIMA model forecasts Erode turmeric prices 30 days ahead with
    a Mean Absolute Percentage Error (MAPE) of 5.20% and a
-   Mean Absolute Error (MAE) of 632.02 Rs/quintal. This level
-   of accuracy is suitable for short-term market guidance.
+   Mean Absolute Error (MAE) of 632.02 Rs/quintal.
 
-2. YIELD PREDICTION (Random Forest)
+2. PRICE FORECASTING (LSTM)
+   The LSTM sequence model reports MAE 6857.25 Rs/quintal,
+   MAPE 51.43%, and RMSE 6933.49 Rs/quintal.
+
+3. YIELD PREDICTION (Random Forest)
    The Random Forest model predicts crop yield with a MAE of
    126.79 kg/ha and MAPE of 1.56%. This enables
    farmers to estimate harvest volumes weeks in advance.
 
-3. FEATURE IMPORTANCE (Ablation Study)
+4. FEATURE IMPORTANCE (Ablation Study)
    The ablation study reveals the relative contribution of price-based
    and weather-based features. Removing either group increases RMSE,
    confirming that both feature classes carry complementary predictive
    information for yield estimation.
 
-4. SEASONAL SELLING STRATEGY
+5. SEASONAL SELLING STRATEGY
    For Erode turmeric, the most profitable selling month is
    Apr, while the worst month is Jul.
    An informed farmer who times sales to the best month gains
    approximately 1,493 Rs/quintal (22.2%)
    compared to selling in the worst month.
 
-5. PRICE SPREAD ANALYSIS
+6. PRICE SPREAD ANALYSIS
    Over the 12-year AGMARKNET dataset, the mean annual price spread
    (30-day minus 7-day rolling average) for turmeric is
    -25.51 Rs/quintal, indicating the degree of

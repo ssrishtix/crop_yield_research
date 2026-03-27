@@ -42,10 +42,10 @@ DEVICE = torch.device("cpu")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # ============================================================================
-# STEP 1 — Load and prepare
+# STEP 1 - Load and prepare
 # ============================================================================
 print("=" * 70)
-print("STEP 1 — Load and prepare")
+print("STEP 1 - Load and prepare")
 print("=" * 70)
 
 df = pd.read_csv(os.path.join(BASE_DIR, "erode_turmeric_aligned.csv"), parse_dates=["arrival_date"])
@@ -66,14 +66,14 @@ df[FEATURES] = df[FEATURES].ffill()
 df = df.dropna(subset=FEATURES).reset_index(drop=True)
 
 print(f"  Shape after cleaning: {df.shape}")
-print(f"  Date range: {df['arrival_date'].min().date()} → {df['arrival_date'].max().date()}")
+print(f"  Date range: {df['arrival_date'].min().date()} to {df['arrival_date'].max().date()}")
 print(f"  Features used: {FEATURES}\n")
 
 # ============================================================================
-# STEP 2 — Build sequences
+# STEP 2 - Build sequences
 # ============================================================================
 print("=" * 70)
-print("STEP 2 — Build sequences")
+print("STEP 2 - Build sequences")
 print("=" * 70)
 
 LOOKBACK = 60
@@ -108,10 +108,10 @@ print(f"  Total sequences created: {len(X_all)}")
 print(f"  X shape: {X_all.shape}  |  y shape: {y_all.shape}\n")
 
 # ============================================================================
-# STEP 3 — Split and normalize
+# STEP 3 - Split and normalize
 # ============================================================================
 print("=" * 70)
-print("STEP 3 — Split and normalize")
+print("STEP 3 - Split and normalize")
 print("=" * 70)
 
 train_mask = date_all < np.datetime64("2022-01-01")
@@ -141,10 +141,10 @@ print(f"  y NOT scaled — values in Rs/quintal")
 print(f"  Scaler fitted on train X with {n_features} features\n")
 
 # ============================================================================
-# STEP 4 — Build and train LSTM
+# STEP 4 - Build and train LSTM
 # ============================================================================
 print("=" * 70)
-print("STEP 4 — Build and train LSTM")
+print("STEP 4 - Build and train LSTM")
 print("=" * 70)
 
 
@@ -257,10 +257,10 @@ plt.close(fig)
 print(f"  Loss curve saved to: {loss_plot_path}\n")
 
 # ============================================================================
-# STEP 5 — Evaluate on test set
+# STEP 5 - Evaluate on test set
 # ============================================================================
 print("=" * 70)
-print("STEP 5 — Evaluate on test set")
+print("STEP 5 - Evaluate on test set")
 print("=" * 70)
 
 # Load best model
@@ -278,7 +278,7 @@ mape = np.mean(np.abs((y_actual - y_pred) / y_actual)) * 100
 rmse = np.sqrt(np.mean((y_actual - y_pred) ** 2))
 
 print(f"\n  {'Metric':<12} {'Value':>12}")
-print(f"  {'─' * 25}")
+print(f"  {'-' * 25}")
 print(f"  {'MAE':<12} {mae:>12.2f} Rs/q")
 print(f"  {'MAPE':<12} {mape:>11.2f}%")
 print(f"  {'RMSE':<12} {rmse:>12.2f} Rs/q")
@@ -302,10 +302,10 @@ plt.close(fig)
 print(f"\n  Evaluation plot saved to: {eval_plot_path}\n")
 
 # ============================================================================
-# STEP 6 — 30-day forecast
+# STEP 6 - 30-day forecast
 # ============================================================================
 print("=" * 70)
-print("STEP 6 — 30-day forecast")
+print("STEP 6 - 30-day forecast")
 print("=" * 70)
 
 # Use the last 60 days of data as input
@@ -322,10 +322,10 @@ forecast_start = last_date + pd.Timedelta(days=1)
 forecast_end   = last_date + pd.Timedelta(days=30)
 
 print(f"\n  Input window: last 60 days ending {last_date.date()}")
-print(f"  Forecast period: {forecast_start.date()} → {forecast_end.date()}")
-print(f"  ╔{'═' * 48}╗")
-print(f"  ║  Predicted 30-day avg price: {forecast:10.2f} Rs/q   ║")
-print(f"  ╚{'═' * 48}╝")
+print(f"  Forecast period: {forecast_start.date()} to {forecast_end.date()}")
+print(f"  {'=' * 52}")
+print(f"  Predicted 30-day avg price: {forecast:10.2f} Rs/q")
+print(f"  {'=' * 52}")
 
 # Save forecast summary
 summary_path = os.path.join(BASE_DIR, "lstm_forecast_summary.txt")
@@ -345,5 +345,5 @@ with open(summary_path, "w") as f:
 
 print(f"\n  Forecast summary saved to: {summary_path}")
 print("\n" + "=" * 70)
-print("DONE — All steps completed successfully.")
+print("DONE - All steps completed successfully.")
 print("=" * 70)

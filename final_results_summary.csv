@@ -1,6 +1,9 @@
 metric,value
 ARIMA 30-day Forecast MAPE (%),5.2
 ARIMA 30-day Forecast MAE (Rs/q),632.02
+LSTM 30-day Forecast MAPE (%),51.43
+LSTM 30-day Forecast MAE (Rs/q),6857.25
+LSTM 30-day Forecast RMSE (Rs/q),6933.49
 RF Yield Prediction MAE (kg/ha),126.79
 RF Yield Prediction MAPE (%),1.56
 Informed Selling Gain (Rs/q),1492.58

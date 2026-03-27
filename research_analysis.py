@@ -25,6 +25,7 @@ subprocess.check_call([sys.executable, "-m", "pip", "install", "-q",
                        "scikit-learn", "pandas", "numpy", "matplotlib"])
 
 import os, warnings
+import re
 warnings.filterwarnings("ignore")
 
 import numpy as np
@@ -50,9 +51,58 @@ def _safe_load(name, **kwargs):
     """Load a CSV or return None with a warning if missing."""
     p = _path(name)
     if not os.path.exists(p):
-        print(f"  ⚠  WARNING: {name} not found — skipping this analysis.")
+        print(f"  WARNING: {name} not found - skipping this analysis.")
         return None
     return pd.read_csv(p, **kwargs)
+
+
+def _load_arima_metrics():
+    """Load ARIMA MAE/MAPE from saved metrics or backtest CSV."""
+    metrics_path = _path("turmeric_price_metrics.csv")
+    backtest_path = _path("turmeric_price_backtest.csv")
+    arima_mae, arima_mape = np.nan, np.nan
+
+    if os.path.exists(metrics_path):
+        mdf = pd.read_csv(metrics_path)
+        if {"metric", "value"}.issubset(mdf.columns):
+            metric_map = {
+                str(r["metric"]).strip().upper(): float(r["value"])
+                for _, r in mdf.dropna(subset=["metric", "value"]).iterrows()
+            }
+            arima_mae = metric_map.get("MAE", np.nan)
+            arima_mape = metric_map.get("MAPE", np.nan)
+
+    if (np.isnan(arima_mae) or np.isnan(arima_mape)) and os.path.exists(backtest_path):
+        bdf = pd.read_csv(backtest_path)
+        if {"actual_price", "predicted_price"}.issubset(bdf.columns):
+            actual = pd.to_numeric(bdf["actual_price"], errors="coerce").dropna().values
+            pred = pd.to_numeric(bdf["predicted_price"], errors="coerce").dropna().values
+            n = min(len(actual), len(pred))
+            if n > 0:
+                actual = actual[:n]
+                pred = pred[:n]
+                arima_mae = float(np.mean(np.abs(actual - pred)))
+                arima_mape = float(
+                    np.mean(np.abs((actual - pred) / np.where(actual == 0, 1, actual))) * 100
+                )
+
+    return arima_mae, arima_mape
+
+
+def _load_lstm_metrics():
+    """Parse LSTM MAE/MAPE/RMSE from lstm_forecast_summary.txt if available."""
+    path = _path("lstm_forecast_summary.txt")
+    if not os.path.exists(path):
+        return np.nan, np.nan, np.nan
+
+    txt = open(path, "r", encoding="utf-8", errors="ignore").read()
+    mae_match = re.search(r"MAE:\s*([0-9]+(?:\.[0-9]+)?)", txt)
+    mape_match = re.search(r"MAPE:\s*([0-9]+(?:\.[0-9]+)?)", txt)
+    rmse_match = re.search(r"RMSE:\s*([0-9]+(?:\.[0-9]+)?)", txt)
+    mae = float(mae_match.group(1)) if mae_match else np.nan
+    mape = float(mape_match.group(1)) if mape_match else np.nan
+    rmse = float(rmse_match.group(1)) if rmse_match else np.nan
+    return mae, mape, rmse
 
 
 # ════════════════════════════════════════════════════════════════════════════════
@@ -196,6 +246,7 @@ def analysis_2_price_spread():
     spread_records = []
     monthly_records = []
     yoy_records = []
+    min_days_for_yoy = 150
 
     for crop_name, cdf in list(crop_frames.items()):
         cdf = cdf.sort_values("arrival_date").reset_index(drop=True)
@@ -232,9 +283,32 @@ def analysis_2_price_spread():
         monthly["crop"] = crop_name
         monthly_records.append(monthly)
 
-        # ── Year-over-year price change % ───────────────────────────────────
-        annual = cdf.groupby("year")["modal_price"].mean().reset_index()
-        annual["yoy_change_pct"] = annual["modal_price"].pct_change() * 100
+        # ── Year-over-year price change % (quality-controlled) ──────────────
+        annual = (
+            cdf.groupby("year")
+            .agg(
+                mean_price=("modal_price", "mean"),
+                n_days=("modal_price", "count"),
+            )
+            .reset_index()
+            .sort_values("year")
+            .reset_index(drop=True)
+        )
+        annual["yoy_change_pct"] = np.nan
+        # Compute YoY only for consecutive years with sufficient day coverage.
+        for idx in range(1, len(annual)):
+            prev_year = int(annual.iloc[idx - 1]["year"])
+            curr_year = int(annual.iloc[idx]["year"])
+            prev_days = int(annual.iloc[idx - 1]["n_days"])
+            curr_days = int(annual.iloc[idx]["n_days"])
+            if curr_year - prev_year != 1:
+                continue
+            if prev_days < min_days_for_yoy or curr_days < min_days_for_yoy:
+                continue
+            prev_price = annual.iloc[idx - 1]["mean_price"]
+            curr_price = annual.iloc[idx]["mean_price"]
+            annual.loc[idx, "yoy_change_pct"] = ((curr_price - prev_price) / prev_price) * 100
+
         annual["crop"] = crop_name
         yoy_records.append(annual)
 
@@ -274,7 +348,12 @@ def analysis_2_price_spread():
     print(f"  Saved → price_spread_analysis.png")
 
     # ── Plot 2: YoY price change bar chart ──────────────────────────────────
-    yoy_df = pd.concat(yoy_records, ignore_index=True).dropna(subset=["yoy_change_pct"])
+    yoy_df = pd.concat(yoy_records, ignore_index=True)
+    yoy_df = yoy_df.dropna(subset=["yoy_change_pct"]).copy()
+
+    if yoy_df.empty:
+        print(f"  WARNING: No valid YoY rows after filters (min_days={min_days_for_yoy}, consecutive years only).")
+        return
 
     fig, ax = plt.subplots(figsize=(12, 6))
     crops = yoy_df["crop"].unique()
@@ -284,8 +363,12 @@ def analysis_2_price_spread():
 
     for i, crop in enumerate(crops):
         sub = yoy_df[yoy_df["crop"] == crop]
-        vals = [sub.loc[sub["year"] == y, "yoy_change_pct"].values[0]
-                if y in sub["year"].values else 0 for y in years]
+        vals = [
+            sub.loc[sub["year"] == y, "yoy_change_pct"].values[0]
+            if y in sub["year"].values
+            else np.nan
+            for y in years
+        ]
         color = "#FF7043" if i == 0 else "#66BB6A"
         ax.bar(x + i * width - width / 2, vals, width, label=crop, color=color,
                edgecolor="white", linewidth=0.8)
@@ -417,9 +500,13 @@ def analysis_4_summary(seasonal_df=None):
     print("ANALYSIS 4 — Consolidated Research Results Summary")
     print("=" * 70)
 
-    # ── ARIMA metrics (hardcoded from Sprint 1) ─────────────────────────────
-    arima_mape = 5.20
-    arima_mae  = 632.02
+    # ── ARIMA metrics (from generated model outputs) ────────────────────────
+    arima_mae, arima_mape = _load_arima_metrics()
+    if np.isnan(arima_mae) or np.isnan(arima_mape):
+        print("  WARNING: ARIMA metrics unavailable. Run price_forecast_model.py first.")
+
+    # ── LSTM metrics (from generated summary) ───────────────────────────────
+    lstm_mae, lstm_mape, lstm_rmse = _load_lstm_metrics()
 
     # ── RF yield predictions ────────────────────────────────────────────────
     rf_df = _safe_load("rf_yield_predictions.csv")
@@ -458,12 +545,16 @@ def analysis_4_summary(seasonal_df=None):
 
     # ── Print summary table ─────────────────────────────────────────────────
     print(f"\n  {'Metric':<45} {'Value':>15}")
-    print(f"  {'─' * 62}")
+    print(f"  {'-' * 62}")
     print(f"  {'ARIMA 30-day Forecast MAPE':<45} {arima_mape:>14.2f}%")
     print(f"  {'ARIMA 30-day Forecast MAE':<45} {arima_mae:>12.2f} Rs/q")
+    if not np.isnan(lstm_mae):
+        print(f"  {'LSTM 30-day Forecast MAPE':<45} {lstm_mape:>14.2f}%")
+        print(f"  {'LSTM 30-day Forecast MAE':<45} {lstm_mae:>12.2f} Rs/q")
+        print(f"  {'LSTM 30-day Forecast RMSE':<45} {lstm_rmse:>12.2f} Rs/q")
     print(f"  {'RF Yield Prediction MAE':<45} {rf_mae:>12.2f} kg/ha")
     print(f"  {'RF Yield Prediction MAPE':<45} {rf_mape:>14.2f}%")
-    print(f"  {'Informed Selling Gain (best−worst month)':<45} {selling_gain_rs:>12.2f} Rs/q")
+    print(f"  {'Informed Selling Gain (best-worst month)':<45} {selling_gain_rs:>12.2f} Rs/q")
     print(f"  {'Informed Selling Gain %':<45} {selling_gain_pct:>14.2f}%")
     print(f"  {'Best Selling Month (Turmeric)':<45} {turmeric_best_month:>15}")
     print(f"  {'Worst Selling Month (Turmeric)':<45} {turmeric_worst_month:>15}")
@@ -473,14 +564,26 @@ def analysis_4_summary(seasonal_df=None):
     summary_rows = [
         {"metric": "ARIMA 30-day Forecast MAPE (%)", "value": round(arima_mape, 2)},
         {"metric": "ARIMA 30-day Forecast MAE (Rs/q)", "value": round(arima_mae, 2)},
-        {"metric": "RF Yield Prediction MAE (kg/ha)", "value": round(rf_mae, 2)},
-        {"metric": "RF Yield Prediction MAPE (%)", "value": round(rf_mape, 2)},
-        {"metric": "Informed Selling Gain (Rs/q)", "value": round(selling_gain_rs, 2)},
-        {"metric": "Informed Selling Gain (%)", "value": round(selling_gain_pct, 2)},
-        {"metric": "Best Selling Month (Turmeric)", "value": turmeric_best_month},
-        {"metric": "Worst Selling Month (Turmeric)", "value": turmeric_worst_month},
-        {"metric": "Mean Annual Price Spread (Rs/q)", "value": round(mean_annual_spread, 2)},
     ]
+    if not np.isnan(lstm_mae):
+        summary_rows.extend(
+            [
+                {"metric": "LSTM 30-day Forecast MAPE (%)", "value": round(lstm_mape, 2)},
+                {"metric": "LSTM 30-day Forecast MAE (Rs/q)", "value": round(lstm_mae, 2)},
+                {"metric": "LSTM 30-day Forecast RMSE (Rs/q)", "value": round(lstm_rmse, 2)},
+            ]
+        )
+    summary_rows.extend(
+        [
+            {"metric": "RF Yield Prediction MAE (kg/ha)", "value": round(rf_mae, 2)},
+            {"metric": "RF Yield Prediction MAPE (%)", "value": round(rf_mape, 2)},
+            {"metric": "Informed Selling Gain (Rs/q)", "value": round(selling_gain_rs, 2)},
+            {"metric": "Informed Selling Gain (%)", "value": round(selling_gain_pct, 2)},
+            {"metric": "Best Selling Month (Turmeric)", "value": turmeric_best_month},
+            {"metric": "Worst Selling Month (Turmeric)", "value": turmeric_worst_month},
+            {"metric": "Mean Annual Price Spread (Rs/q)", "value": round(mean_annual_spread, 2)},
+        ]
+    )
     pd.DataFrame(summary_rows).to_csv(_path("final_results_summary.csv"), index=False)
     print(f"\n  Saved → final_results_summary.csv")
 
@@ -494,28 +597,41 @@ def analysis_4_summary(seasonal_df=None):
         f.write("1. PRICE FORECASTING (ARIMA)\n")
         f.write(f"   The ARIMA model forecasts Erode turmeric prices 30 days ahead with\n")
         f.write(f"   a Mean Absolute Percentage Error (MAPE) of {arima_mape:.2f}% and a\n")
-        f.write(f"   Mean Absolute Error (MAE) of {arima_mae:.2f} Rs/quintal. This level\n")
-        f.write(f"   of accuracy is suitable for short-term market guidance.\n\n")
+        f.write(f"   Mean Absolute Error (MAE) of {arima_mae:.2f} Rs/quintal.\n\n")
 
-        f.write("2. YIELD PREDICTION (Random Forest)\n")
+        if not np.isnan(lstm_mae):
+            f.write("2. PRICE FORECASTING (LSTM)\n")
+            f.write(f"   The LSTM sequence model reports MAE {lstm_mae:.2f} Rs/quintal,\n")
+            f.write(f"   MAPE {lstm_mape:.2f}%, and RMSE {lstm_rmse:.2f} Rs/quintal.\n\n")
+            rf_section_index = "3"
+            ablation_section_index = "4"
+            seasonal_section_index = "5"
+            spread_section_index = "6"
+        else:
+            rf_section_index = "2"
+            ablation_section_index = "3"
+            seasonal_section_index = "4"
+            spread_section_index = "5"
+
+        f.write(f"{rf_section_index}. YIELD PREDICTION (Random Forest)\n")
         f.write(f"   The Random Forest model predicts crop yield with a MAE of\n")
         f.write(f"   {rf_mae:.2f} kg/ha and MAPE of {rf_mape:.2f}%. This enables\n")
         f.write(f"   farmers to estimate harvest volumes weeks in advance.\n\n")
 
-        f.write("3. FEATURE IMPORTANCE (Ablation Study)\n")
+        f.write(f"{ablation_section_index}. FEATURE IMPORTANCE (Ablation Study)\n")
         f.write(f"   The ablation study reveals the relative contribution of price-based\n")
         f.write(f"   and weather-based features. Removing either group increases RMSE,\n")
         f.write(f"   confirming that both feature classes carry complementary predictive\n")
         f.write(f"   information for yield estimation.\n\n")
 
-        f.write("4. SEASONAL SELLING STRATEGY\n")
+        f.write(f"{seasonal_section_index}. SEASONAL SELLING STRATEGY\n")
         f.write(f"   For Erode turmeric, the most profitable selling month is\n")
         f.write(f"   {turmeric_best_month}, while the worst month is {turmeric_worst_month}.\n")
         f.write(f"   An informed farmer who times sales to the best month gains\n")
         f.write(f"   approximately {selling_gain_rs:,.0f} Rs/quintal ({selling_gain_pct:.1f}%)\n")
         f.write(f"   compared to selling in the worst month.\n\n")
 
-        f.write("5. PRICE SPREAD ANALYSIS\n")
+        f.write(f"{spread_section_index}. PRICE SPREAD ANALYSIS\n")
         f.write(f"   Over the 12-year AGMARKNET dataset, the mean annual price spread\n")
         f.write(f"   (30-day minus 7-day rolling average) for turmeric is\n")
         f.write(f"   {mean_annual_spread:.2f} Rs/quintal, indicating the degree of\n")
@@ -535,15 +651,15 @@ def analysis_4_summary(seasonal_df=None):
 # MAIN
 # ════════════════════════════════════════════════════════════════════════════════
 if __name__ == "__main__":
-    print("\n" + "█" * 70)
-    print("  Sprint 5 — Research Analysis Pipeline")
-    print("█" * 70 + "\n")
+    print("\n" + "=" * 70)
+    print("  Sprint 5 - Research Analysis Pipeline")
+    print("=" * 70 + "\n")
 
     analysis_1_ablation()
     analysis_2_price_spread()
     seasonal_df = analysis_3_seasonal()
     analysis_4_summary(seasonal_df)
 
-    print("█" * 70)
+    print("=" * 70)
     print("  ALL ANALYSES COMPLETE")
-    print("█" * 70 + "\n")
+    print("=" * 70 + "\n")

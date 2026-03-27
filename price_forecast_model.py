@@ -282,6 +282,8 @@ def plot_forecast(train: pd.Series,
 def main():
     INPUT_FILE  = "turmeric_features.csv"
     OUTPUT_FILE = "turmeric_price_forecast.csv"
+    METRICS_FILE = "turmeric_price_metrics.csv"
+    BACKTEST_FILE = "turmeric_price_backtest.csv"
 
     print(f"\n{'='*60}")
     print("  Turmeric Price Forecast  —  ARIMA(5,1,0)")
@@ -295,6 +297,22 @@ def main():
 
     # ── Fit ARIMA & evaluate on test set ─────────────────────────
     final_model, test_preds, mae, mape = fit_and_evaluate(train, test)
+    backtest_df = pd.DataFrame(
+        {
+            "date": test.index,
+            "actual_price": test.values,
+            "predicted_price": test_preds.values,
+            "abs_error": np.abs(test.values - test_preds.values),
+        }
+    )
+    backtest_df.to_csv(BACKTEST_FILE, index=False)
+    metrics_df = pd.DataFrame(
+        [
+            {"metric": "MAE", "value": float(mae), "unit": "Rs/quintal"},
+            {"metric": "MAPE", "value": float(mape), "unit": "percent"},
+        ]
+    )
+    metrics_df.to_csv(METRICS_FILE, index=False)
 
     # ── 30-day future forecast ───────────────────────────────────
     df_forecast = forecast_future(final_model, series, horizon=30)
@@ -307,6 +325,8 @@ def main():
     # ── Save forecast CSV ────────────────────────────────────────
     df_forecast.to_csv(OUTPUT_FILE, index=False)
     print(f"\n  Saved →  {OUTPUT_FILE}")
+    print(f"  Saved →  {BACKTEST_FILE}")
+    print(f"  Saved →  {METRICS_FILE}")
     print("\n  ✓  price_forecast_model.py complete.\n")
 
 
