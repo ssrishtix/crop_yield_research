@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgriDash TN | Price Forecast Detail</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-low": "#181c22",
+                        "surface-container": "#1c2026",
+                        "on-primary-container": "#003c0b",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "inverse-on-surface": "#2d3137",
+                        "background": "#10141a",
+                        "primary-fixed": "#94f990",
+                        "primary-container": "#4caf50",
+                        "secondary-container": "#29513f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-primary-fixed": "#002204",
+                        "on-background": "#dfe2eb",
+                        "outline": "#899484",
+                        "on-primary": "#00390a",
+                        "surface-variant": "#31353c",
+                        "surface-container-highest": "#31353c",
+                        "inverse-surface": "#dfe2eb",
+                        "surface": "#10141a",
+                        "outline-variant": "#3f4a3c",
+                        "on-error": "#690005",
+                        "on-surface": "#dfe2eb",
+                        "error": "#ffb4ab",
+                        "tertiary": "#ffb95f",
+                        "secondary": "#a5d0b9",
+                        "surface-container-high": "#262a31",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-tint": "#78dc77",
+                        "on-tertiary": "#472a00",
+                        "secondary-fixed-dim": "#a5d0b9",
+                        "error-container": "#93000a",
+                        "primary": "#78dc77",
+                        "on-tertiary-container": "#4a2c00",
+                        "surface-bright": "#353940",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#c1ecd4",
+                        "primary-fixed-dim": "#78dc77",
+                        "on-secondary-fixed": "#002114",
+                        "on-primary-fixed-variant": "#005313",
+                        "on-secondary": "#0e3727",
+                        "on-secondary-container": "#97c2ab",
+                        "inverse-primary": "#006e1c",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-container-lowest": "#0a0e14",
+                        "surface-dim": "#10141a",
+                        "tertiary-container": "#d88a00",
+                        "on-secondary-fixed-variant": "#274e3d",
+                        "on-surface-variant": "#becab9"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-grid {
+            background-image: radial-gradient(circle, #3f4a3c 0.5px, transparent 0.5px);
+            background-size: 40px 40px;
+        }
+        .glass-panel {
+            background: rgba(28, 32, 38, 0.6);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-[#1b4332] dark:bg-[#29513f] flex flex-col py-6 shadow-xl z-50">
+<div class="px-6 mb-10">
+<h1 class="text-lg font-black text-white tracking-wide">AgriDash TN</h1>
+<p class="text-xs text-primary/70 font-medium">Agricultural Analytics</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-['Inter'] tracking-wide">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#78dc77] border-l-4 border-[#78dc77] bg-[#1c2026]/20 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="text-sm font-['Inter'] tracking-wide">Price Forecast</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-sm font-['Inter'] tracking-wide">Yield Prediction</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-sm font-['Inter'] tracking-wide">Profit Estimator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined">wb_sunny</span>
+<span class="text-sm font-['Inter'] tracking-wide">Weather &amp; Soil</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-['Inter'] tracking-wide">Research Analysis</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="p-3 bg-black/20 rounded-lg flex items-center gap-3">
+<img alt="User Research Avatar" class="w-8 h-8 rounded-full bg-surface-container" data-alt="portrait of a professional agricultural researcher in a modern dark-themed laboratory setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_iaOxX41kRktjSddD_YeBm3K-62_0giYkV59zkfKJFaOyjrobkfaCJ7AgwDX43nfJ6VxEUP8YayKhR7Ppfin2xExarkK3c8ykBCyZKptlPjx-CiuSbzpSKR6zdvEwxqgMM8wDLf7MBxXc-T5oDqF19BH_KMLrnGNV9SnPJlQt0THkqrW1AC2d2LoQQ-11lhEKs3k2dVL_a5OAa1zG0sNa9O-RPjdDaLwL-ghA_SlPP2m4Sh1E60bkL1oZ8epE8OfqheFnIQlxtz0"/>
+<div class="overflow-hidden">
+<p class="text-xs font-bold text-white truncate">Dr. Arulmani</p>
+<p class="text-[10px] text-[#becab9] truncate">Senior Agronomist</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[240px] min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 flex justify-between items-center px-8 py-4 w-full bg-[#161b22] dark:bg-[#161b22]">
+<div class="flex items-center gap-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-2 text-[10px] text-outline uppercase tracking-widest font-bold mb-1">
+<span>Analytics</span>
+<span class="material-symbols-outlined text-[10px]">chevron_right</span>
+<span>Price Forecast</span>
+</div>
+<div class="flex items-center gap-3">
+<h2 class="text-xl font-bold text-white font-headline">Turmeric — Erode, TN</h2>
+<span class="px-2 py-0.5 bg-tertiary/20 text-tertiary text-[10px] font-bold rounded-sm border border-tertiary/30">Kharif 2024</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-[#78dc77] font-semibold transition-colors" href="#">Forecasting</a>
+<a class="text-sm font-medium text-[#becab9] hover:text-white hover:bg-[#262a31] transition-colors px-2 py-1 rounded" href="#">Market Analysis</a>
+<a class="text-sm font-medium text-[#becab9] hover:text-white hover:bg-[#262a31] transition-colors px-2 py-1 rounded" href="#">History</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-[#becab9] hover:text-white transition-colors">notifications</button>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<button class="material-symbols-outlined text-[#becab9] hover:text-white transition-colors">search</button>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<section class="p-8 space-y-8 flex-1">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-1">
+<h3 class="text-3xl font-extrabold text-white tracking-tight">30-Day ARIMA Price Forecast</h3>
+<p class="text-on-surface-variant font-medium">Erode Turmeric · Jun 19 – Jul 18, 2024</p>
+</div>
+<div class="flex gap-3">
+<div class="px-4 py-2 bg-primary/10 rounded-lg flex flex-col border border-primary/20">
+<span class="text-[10px] text-primary font-bold uppercase tracking-wider">ARIMA MAPE</span>
+<span class="text-xl font-black text-primary">5.2%</span>
+</div>
+<div class="px-4 py-2 bg-tertiary/10 rounded-lg flex flex-col border border-tertiary/20">
+<span class="text-[10px] text-tertiary font-bold uppercase tracking-wider">MAE per Quintal</span>
+<span class="text-xl font-black text-tertiary">₹632</span>
+</div>
+</div>
+</div>
+<!-- Main Chart Container -->
+<div class="bg-surface-container rounded-xl p-8 relative overflow-hidden group">
+<div class="absolute inset-0 chart-grid opacity-10"></div>
+<div class="relative z-10">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h4 class="text-on-surface font-bold text-lg">Price Trajectory Analysis</h4>
+<p class="text-sm text-outline">Projected modal prices with 95% confidence interval boundaries</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="text-[10px] text-on-surface-variant font-bold uppercase">Predicted Price</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm border border-tertiary border-dashed"></div>
+<span class="text-[10px] text-on-surface-variant font-bold uppercase">Modal Baseline</span>
+</div>
+</div>
+</div>
+<!-- Simplified Chart Visualization using SVG -->
+<div class="h-[400px] w-full relative">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 1000 400">
+<!-- Grid Lines -->
+<line stroke="#3f4a3c" stroke-dasharray="4" stroke-width="0.5" x1="0" x2="1000" y1="0" y2="0"></line>
+<line stroke="#3f4a3c" stroke-dasharray="4" stroke-width="0.5" x1="0" x2="1000" y1="100" y2="100"></line>
+<line stroke="#3f4a3c" stroke-dasharray="4" stroke-width="0.5" x1="0" x2="1000" y1="200" y2="200"></line>
+<line stroke="#3f4a3c" stroke-dasharray="4" stroke-width="0.5" x1="0" x2="1000" y1="300" y2="300"></line>
+<line stroke="#3f4a3c" stroke-dasharray="4" stroke-width="0.5" x1="0" x2="1000" y1="400" y2="400"></line>
+<!-- Confidence Interval Shaded Area -->
+<path d="M0,180 L200,120 L400,160 L600,175 L800,175 L1000,175 L1000,230 L800,215 L600,210 L400,195 L200,160 L0,200 Z" fill="rgba(120, 220, 119, 0.15)"></path>
+<!-- Modal Baseline -->
+<line stroke="#ffb95f" stroke-dasharray="8 4" stroke-width="1.5" x1="0" x2="1000" y1="192" y2="192"></line>
+<!-- Main Price Line -->
+<path d="M0,190 L200,140 L400,178 L600,192 L800,192 L1000,192" fill="none" stroke="#78dc77" stroke-width="2.5"></path>
+<!-- Data Points -->
+<circle cx="0" cy="190" fill="#78dc77" r="4"></circle>
+<circle cx="200" cy="140" fill="#78dc77" r="4"></circle>
+<circle cx="400" cy="178" fill="#78dc77" r="4"></circle>
+<circle cx="600" cy="192" fill="#78dc77" r="4"></circle>
+<circle cx="800" cy="192" fill="#78dc77" r="4"></circle>
+<circle cx="1000" cy="192" fill="#78dc77" r="4"></circle>
+<!-- Annotation -->
+<foreignobject height="40" width="220" x="750" y="240">
+<div class="text-[10px] text-outline italic font-medium">Confidence interval widens over time due to variance volatility</div>
+</foreignobject>
+</svg>
+<!-- Y-Axis Labels -->
+<div class="absolute -left-12 inset-y-0 flex flex-col justify-between text-[10px] font-bold text-outline py-1">
+<span>₹16,500</span>
+<span>₹15,375</span>
+<span>₹14,250</span>
+<span>₹13,125</span>
+<span>₹12,000</span>
+</div>
+</div>
+<!-- X-Axis Labels -->
+<div class="mt-4 flex justify-between text-[10px] font-bold text-outline px-2">
+<span>JUN 19</span>
+<span>JUN 24</span>
+<span>JUN 29</span>
+<span>JUL 05</span>
+<span>JUL 12</span>
+<span>JUL 18</span>
+</div>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Model Performance Card -->
+<div class="bg-surface-container rounded-xl p-6 space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h4 class="text-white font-bold">Model Performance Card</h4>
+</div>
+<div class="grid grid-cols-2 gap-y-6">
+<div class="space-y-1">
+<p class="text-[10px] text-outline font-bold uppercase">MAPE Accuracy</p>
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold text-primary">5.2%</span>
+<span class="text-[10px] text-primary/80 font-medium">✓ Optimal</span>
+</div>
+<p class="text-[10px] text-on-surface-variant">Below 6% research threshold</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-outline font-bold uppercase">Mean Absolute Error</p>
+<span class="text-xl font-bold text-on-surface">₹632.02</span>
+<p class="text-[10px] text-on-surface-variant">Avg deviation per unit</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-outline font-bold uppercase">Forecast Horizon</p>
+<span class="text-xl font-bold text-on-surface">30 Days</span>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-outline font-bold uppercase">Model Architecture</p>
+<span class="text-xl font-bold text-on-surface">ARIMA (p,d,q)</span>
+<p class="text-[10px] text-on-surface-variant">Trained 2012–2024 data</p>
+</div>
+</div>
+</div>
+<!-- Price Signals Card -->
+<div class="bg-surface-container rounded-xl p-6 space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+<h4 class="text-white font-bold">Price Signals Card</h4>
+</div>
+<div class="flex flex-col md:flex-row gap-6">
+<div class="flex-1 space-y-4">
+<div class="space-y-1">
+<p class="text-[10px] text-outline font-bold uppercase">Current Modal Price</p>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-black text-tertiary">₹14,474</span>
+<span class="text-sm text-on-surface-variant font-bold">/q</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-0.5">
+<p class="text-[10px] text-outline font-bold">7D AVG</p>
+<p class="text-sm font-bold text-on-surface">₹14,438</p>
+</div>
+<div class="space-y-0.5">
+<p class="text-[10px] text-outline font-bold">30D AVG</p>
+<p class="text-sm font-bold text-on-surface">₹14,499</p>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/2 space-y-4">
+<div class="p-3 bg-surface-container-high rounded-lg flex justify-between items-center">
+<div>
+<p class="text-[10px] text-outline font-bold">TREND</p>
+<p class="text-sm font-bold text-white">Stable plateau phase</p>
+</div>
+<span class="material-symbols-outlined text-primary">east</span>
+</div>
+<div class="grid grid-cols-1 gap-2">
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant">Price Spread:</span>
+<span class="text-error font-bold">−₹25.51</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant">Best Sell Month:</span>
+<span class="text-primary font-bold">Apr (+22.2%)</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-on-surface-variant">Risk Alert:</span>
+<span class="text-tertiary font-bold">Jul Volatility</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Seasonal Calendar -->
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<h4 class="text-lg font-bold text-white">Turmeric Price Seasonality Index</h4>
+<span class="text-[10px] text-outline font-bold uppercase">Based on 12-Year Historical Cycle</span>
+</div>
+<div class="grid grid-cols-12 gap-2 h-16">
+<div class="bg-[#1b4332] rounded flex flex-col items-center justify-center border border-white/5 relative group cursor-help">
+<span class="text-[10px] font-bold text-white/40">JAN</span>
+<div class="absolute -top-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="bg-[#2d5a27] rounded flex flex-col items-center justify-center border border-white/5 relative group cursor-help">
+<span class="text-[10px] font-bold text-white/60">FEB</span>
+</div>
+<div class="bg-[#386641] rounded flex flex-col items-center justify-center border border-white/5 relative group cursor-help">
+<span class="text-[10px] font-bold text-white/80">MAR</span>
+</div>
+<div class="bg-[#78dc77] rounded flex flex-col items-center justify-center border border-white/10 relative group cursor-help shadow-[0_0_15px_rgba(120,220,119,0.3)]">
+<span class="text-[10px] font-black text-on-primary">APR</span>
+<span class="absolute -bottom-2 text-[8px] font-bold text-primary">BEST</span>
+</div>
+<div class="bg-tertiary/60 rounded flex flex-col items-center justify-center border border-white/5 relative group cursor-help">
+<span class="text-[10px] font-bold text-white">MAY</span>
+</div>
+<div class="bg-tertiary/40 rounded flex flex-col items-center justify-center border border-white/5 relative group cursor-help">
+<span class="text-[10px] font-bold text-white/80">JUN</span>
+</div>
+<div class="bg-error/20 rounded flex flex-col items-center justify-center border border-tertiary border-dashed relative group cursor-help">
+<span class="text-[10px] font-bold text-tertiary">JUL</span>
+<span class="absolute -bottom-2 text-[8px] font-bold text-tertiary">WORST</span>
+</div>
+<div class="bg-gradient-to-b from-[#29513f] to-[#10141a] rounded flex flex-col items-center justify-center border border-white/5">
+<span class="text-[10px] font-bold text-white/30">AUG</span>
+</div>
+<div class="bg-gradient-to-b from-[#29513f] to-[#10141a] rounded flex flex-col items-center justify-center border border-white/5">
+<span class="text-[10px] font-bold text-white/30">SEP</span>
+</div>
+<div class="bg-gradient-to-b from-[#29513f] to-[#10141a] rounded flex flex-col items-center justify-center border border-white/5">
+<span class="text-[10px] font-bold text-white/30">OCT</span>
+</div>
+<div class="bg-gradient-to-b from-[#29513f] to-[#10141a] rounded flex flex-col items-center justify-center border border-white/5">
+<span class="text-[10px] font-bold text-white/30">NOV</span>
+</div>
+<div class="bg-gradient-to-b from-[#29513f] to-[#10141a] rounded flex flex-col items-center justify-center border border-white/5">
+<span class="text-[10px] font-bold text-white/30">DEC</span>
+</div>
+</div>
+</div>
+<!-- Contextual Insights Section -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-primary/40">
+<p class="text-xs font-bold text-primary uppercase mb-2">Market Sentiment</p>
+<p class="text-sm text-[#becab9] leading-relaxed">Incoming Erode arrivals are expected to stabilize. Export demand from MENA region remains consistent, preventing price collapse.</p>
+</div>
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-tertiary/40">
+<p class="text-xs font-bold text-tertiary uppercase mb-2">Supply Chain Constraint</p>
+<p class="text-sm text-[#becab9] leading-relaxed">Storage levels at Erode warehouses are at 72% capacity. Recent monsoon delays may impact upcoming sowing decisions.</p>
+</div>
+<div class="bg-surface-container-low p-5 rounded-lg border-l-2 border-outline/40">
+<p class="text-xs font-bold text-outline uppercase mb-2">Recommended Action</p>
+<p class="text-sm text-[#becab9] leading-relaxed">Hold inventory for October demand surge. Current July window is not ideal for bulk liquidation due to typical monsoon lull.</p>
+</div>
+</div>
+</section>
+<!-- Footer / Feedback -->
+<footer class="p-8 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-outline font-medium">
+<div class="flex items-center gap-6">
+<span>© 2024 AgriDash Tamil Nadu Analytics Division</span>
+<span>Data Refreshed: Jun 19, 2024 (08:30 IST)</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[14px]">file_download</span>
+                    PDF REPORT
+                </button>
+<button class="flex items-center gap-1 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[14px]">share</span>
+                    SHARE DASHBOARD
+                </button>
+</div>
+</footer>
+</main>
+<!-- Floating Action Button - Supressed on Detail Page as per mandate -->
+<!-- Suppression Logic: Suppress FAB on Details screens -->
+</body></html>

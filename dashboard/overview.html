@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AgriDash TN | Agricultural Analytics Overview</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary": "#a5d0b9",
+                        "surface-variant": "#31353c",
+                        "error": "#ffb4ab",
+                        "surface-container-low": "#181c22",
+                        "on-primary-fixed-variant": "#005313",
+                        "primary-fixed-dim": "#78dc77",
+                        "on-error": "#690005",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-secondary": "#0e3727",
+                        "on-primary": "#00390a",
+                        "primary-fixed": "#94f990",
+                        "on-background": "#dfe2eb",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#3f4a3c",
+                        "outline": "#899484",
+                        "surface-tint": "#78dc77",
+                        "tertiary": "#ffb95f",
+                        "on-surface-variant": "#becab9",
+                        "primary": "#78dc77",
+                        "secondary-fixed-dim": "#a5d0b9",
+                        "surface": "#10141a",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-tertiary-fixed": "#2a1700",
+                        "surface-bright": "#353940",
+                        "secondary-fixed": "#c1ecd4",
+                        "surface-container-lowest": "#0a0e14",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-secondary-container": "#97c2ab",
+                        "surface-container-high": "#262a31",
+                        "surface-container-highest": "#31353c",
+                        "secondary-container": "#29513f",
+                        "on-secondary-fixed-variant": "#274e3d",
+                        "on-secondary-fixed": "#002114",
+                        "inverse-on-surface": "#2d3137",
+                        "on-tertiary-container": "#4a2c00",
+                        "error-container": "#93000a",
+                        "surface-dim": "#10141a",
+                        "inverse-surface": "#dfe2eb",
+                        "on-primary-fixed": "#002204",
+                        "background": "#10141a",
+                        "on-surface": "#dfe2eb",
+                        "tertiary-container": "#d88a00",
+                        "inverse-primary": "#006e1c",
+                        "on-primary-container": "#003c0b",
+                        "primary-container": "#4caf50",
+                        "on-tertiary": "#472a00",
+                        "surface-container": "#1c2026"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(49, 53, 60, 0.6); backdrop-filter: blur(12px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex overflow-hidden">
+<!-- Sidebar (SideNavBar Shared Component) -->
+<aside class="fixed left-0 top-0 h-full w-[240px] bg-[#1b4332] dark:bg-[#29513f] flex flex-col h-full py-6 shadow-xl z-50">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-black text-white uppercase tracking-tighter">AgriDash TN</h1>
+<p class="text-xs text-[#78dc77] opacity-80 font-medium">Agricultural Analytics</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active: Overview -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#78dc77] border-l-4 border-[#78dc77] bg-[#1c2026]/20 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Inter'] text-sm tracking-wide">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-['Inter'] text-sm tracking-wide">Price Forecast</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-['Inter'] text-sm tracking-wide">Yield Prediction</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-['Inter'] text-sm tracking-wide">Profit Estimator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">wb_sunny</span>
+<span class="font-['Inter'] text-sm tracking-wide">Weather &amp; Soil</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#becab9] hover:bg-[#1c2026]/40 hover:text-white transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Inter'] text-sm tracking-wide">Research Analysis</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="p-3 rounded-xl bg-surface-container-lowest flex items-center gap-3">
+<img class="w-8 h-8 rounded-full border border-outline-variant/30" data-alt="User profile avatar of a researcher in a professional agricultural setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkG-dWuFl0fSx6ipnWkZRAKs1HtZ6h_4PhQEeoLUO5pYmnqYBIkWsev6XFI-6Rj4DgMFVdFAo3EfVcgOtpUzgvvbhbkd66pxLLqiIPFhY4eH3bJWecsa35mqslfO8T2bn7MXQ9AeyI7rjgq96tpA1IcaZLNsSSdb4gVzn86jstC7E9TGIeYX0LRc0Ghquh59bX1S8yPQ-HIHzVshtSbJXSi_2N3JtP4jZNnrY4nFZtsytyfdq4A1tOrnnjBqoDH0qlXpA2LnpCZLM"/>
+<div class="overflow-hidden">
+<p class="text-xs font-bold text-white truncate">Dr. Arulmani</p>
+<p class="text-[10px] text-outline truncate">Lead Agronomist</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Well -->
+<main class="ml-[240px] flex-1 flex flex-col h-screen overflow-hidden bg-surface">
+<!-- Top Navbar (TopNavBar Shared Component) -->
+<header class="flex justify-between items-center px-6 py-3 w-full bg-[#161b22] dark:bg-[#161b22] sticky top-0 z-40">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-white font-['Inter']">AgriDash TN</span>
+<div class="h-4 w-[1px] bg-outline-variant/50"></div>
+<div class="flex gap-4">
+<span class="text-[#78dc77] font-semibold font-['Inter'] text-sm">Turmeric — Erode, TN</span>
+<span class="text-[#becab9] font-['Inter'] text-sm">Kharif 2024</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#becab9] hover:text-white hover:bg-[#262a31] transition-colors p-2 rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant/20">
+<img class="w-full h-full object-cover" data-alt="User Research Avatar in a clean modern circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCwOaKQ1Mu3jptTb1cgNr6zrp35-TyID01Jg6rNf4za5beUOrDcfmn3U9BlVNK5jWi3MIhT_iwAcaUL66uTUfFMFIv1A_u-tAHZIq2YfVsbXYxoXA3-jFG-jZNhCrnAds-zYIjcfGzALJi6Hc8I7EHaTiM9eetdveEcvmngIMiwcRd-4md6-itxJUvvmJKf9Hdl5zTn5r40vvNf_i6lGACebxWJhI3jAtRgS3ZBes-nJw7Wef1ptohb9Wt1geUPUXz43TEQPyH_Djs"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
+<!-- KPI Row: 4 Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+<!-- KPI 1 -->
+<div class="bg-surface-container rounded-xl p-5 border-0 shadow-sm">
+<p class="text-outline text-xs font-bold uppercase tracking-wider mb-1">Modal Price</p>
+<div class="flex items-baseline gap-2">
+<h2 class="text-2xl font-black text-white">₹14,474</h2>
+<span class="text-[10px] text-outline font-medium">/quintal</span>
+</div>
+<div class="mt-2 flex items-center gap-1 text-primary text-xs font-semibold">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+                        +2.3% vs last week
+                    </div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container rounded-xl p-5 border-0 shadow-sm">
+<p class="text-outline text-xs font-bold uppercase tracking-wider mb-1">Price Spread</p>
+<div class="flex items-baseline gap-2">
+<h2 class="text-2xl font-black text-on-surface-variant">−₹25.51</h2>
+</div>
+<div class="mt-2 text-outline text-xs font-medium">
+                        30d vs 7d avg spread
+                    </div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container rounded-xl p-5 border-0 shadow-sm">
+<p class="text-outline text-xs font-bold uppercase tracking-wider mb-1">Yield Prediction</p>
+<div class="flex items-baseline gap-2">
+<h2 class="text-2xl font-black text-white">7,442</h2>
+<span class="text-[10px] text-outline font-medium">quintals/ha</span>
+</div>
+<div class="mt-2 flex items-center gap-1 text-primary text-xs font-semibold">
+<span class="material-symbols-outlined text-sm">precision_manufacturing</span>
+                        RF Forecast 4-wk
+                    </div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container rounded-xl p-5 border-0 shadow-sm">
+<p class="text-outline text-xs font-bold uppercase tracking-wider mb-1">Est. Profit/ha</p>
+<div class="flex items-baseline gap-2">
+<h2 class="text-2xl font-black text-tertiary">₹1,24,800</h2>
+</div>
+<div class="mt-2 text-outline text-xs font-medium">
+                        at current modal price
+                    </div>
+</div>
+</div>
+<!-- Main Data Grid -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Left Column (8 units) -->
+<div class="col-span-12 xl:col-span-8 space-y-6">
+<!-- ARIMA Price Forecast Card -->
+<section class="bg-surface-container-low rounded-xl p-6 relative overflow-hidden">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="text-lg font-bold text-white mb-1">30-Day ARIMA Price Forecast</h3>
+<p class="text-sm text-on-surface-variant">Projected market value for Erode Turmeric Cluster</p>
+</div>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded border border-primary/20">ARIMA · MAPE 5.2%</span>
+</div>
+<!-- Simplified Visualization Container -->
+<div class="h-[280px] w-full relative mt-4 border-l border-b border-outline-variant/30">
+<!-- Y-Axis Labels -->
+<div class="absolute -left-10 h-full flex flex-col justify-between text-[10px] text-outline py-1">
+<span>16,500</span>
+<span>15,000</span>
+<span>13,500</span>
+<span>12,000</span>
+</div>
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between py-1 opacity-10">
+<div class="border-t border-dashed border-outline"></div>
+<div class="border-t border-dashed border-outline"></div>
+<div class="border-t border-dashed border-outline"></div>
+<div class="border-t border-dashed border-outline"></div>
+</div>
+<!-- Forecast Band (SVG) -->
+<svg class="absolute inset-0 w-full h-full overflow-visible" preserveaspectratio="none">
+<!-- CI Band -->
+<path d="M0 180 L50 160 L100 170 L150 140 L200 155 L250 130 L300 110 L350 120 L400 90 L450 100 L500 85 L550 95 L600 70 L650 80 L700 60 L750 70 L800 50 V110 L750 130 L700 120 L650 140 L600 130 L550 155 L500 145 L450 160 L400 150 L350 180 L300 170 L250 190 L200 215 L150 200 L100 230 L50 220 L0 240 Z" fill="url(#grad-band)" opacity="0.2"></path>
+<!-- Main Line -->
+<polyline fill="none" points="0,210 50,190 100,200 150,170 200,185 250,160 300,140 350,150 400,120 450,130 500,115 550,125 600,100 650,110 700,90 750,100 800,80" stroke="#78dc77" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></polyline>
+<!-- Modal Price Ref Line -->
+<line stroke="#ffb95f" stroke-dasharray="6,4" stroke-width="1.5" x1="0" x2="800" y1="140" y2="140"></line>
+<defs>
+<lineargradient id="grad-band" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#78dc77;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#78dc77;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+<!-- Reference Label -->
+<div class="absolute top-[125px] right-2 text-[10px] text-tertiary font-bold bg-surface-container-high px-1 rounded">Modal Line: 14,474</div>
+</div>
+<!-- X-Axis Labels -->
+<div class="flex justify-between mt-4 text-[10px] text-outline font-medium px-4">
+<span>Jun 19</span>
+<span>Jun 26</span>
+<span>Jul 03</span>
+<span>Jul 10</span>
+<span>Jul 18 2024</span>
+</div>
+</section>
+<!-- Profit Estimation Card -->
+<section class="bg-surface-container-low rounded-xl p-6">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-bold text-white">Profit Estimation Module</h3>
+<div class="text-[10px] text-outline-variant font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">info</span>
+                                Cost Assumption: ₹7,800/quintal
+                            </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-4">
+<div class="flex justify-between items-end border-b border-outline-variant/10 pb-2">
+<span class="text-on-surface-variant text-sm">Gross Revenue</span>
+<span class="text-xl font-bold text-white">₹2,14,656</span>
+</div>
+<div class="flex justify-between items-end border-b border-outline-variant/10 pb-2">
+<span class="text-on-surface-variant text-sm">Net Profit</span>
+<span class="text-xl font-bold text-primary">₹1,24,800</span>
+</div>
+<div class="pt-2">
+<div class="flex justify-between text-[10px] text-outline mb-1">
+<span>Lower Bound</span>
+<span>Upper Bound</span>
+</div>
+<div class="flex justify-between text-xs font-bold text-on-surface mb-2">
+<span>₹96,300</span>
+<span>₹1,53,200</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 65%"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container rounded-lg p-4 flex flex-col justify-center border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<div>
+<p class="text-xs text-outline font-bold uppercase tracking-tighter">Profitability Margin</p>
+<p class="text-2xl font-black text-white">58.14%</p>
+</div>
+</div>
+<div class="h-1 bg-outline-variant/20 rounded-full relative">
+<div class="absolute left-1/3 w-[2px] h-3 -top-1 bg-tertiary"></div>
+<span class="absolute left-1/3 top-3 text-[8px] text-tertiary font-bold">BREAK-EVEN</span>
+</div>
+<p class="text-[10px] text-on-surface-variant mt-5 leading-relaxed italic">
+                                    Estimation based on random forest weighted yield of 27.52 q/ha and modal market pricing at Erode Regulated Market.
+                                </p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column (4 units) -->
+<div class="col-span-12 xl:col-span-4 space-y-6">
+<!-- Random Forest Yield Prediction Card -->
+<section class="bg-surface-container-low rounded-xl p-6 h-fit">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-sm font-bold text-white uppercase tracking-tight">RF Yield Predictions</h3>
+<span class="bg-tertiary/10 text-tertiary text-[9px] font-bold px-2 py-1 rounded border border-tertiary/20">MAE 126.79 kg/ha</span>
+</div>
+<div class="space-y-6">
+<!-- Chart Placeholder for Yield -->
+<div class="h-[240px] w-full flex items-end justify-between gap-2 px-2 border-l border-b border-outline-variant/30">
+<!-- Group 1: 2022 -->
+<div class="flex flex-1 items-end justify-center gap-0.5">
+<div class="w-2 bg-primary rounded-t-sm" style="height: 60%"></div>
+<div class="w-2 bg-secondary rounded-t-sm" style="height: 50%"></div>
+<div class="w-2 bg-tertiary rounded-t-sm" style="height: 40%"></div>
+</div>
+<!-- Group 2: 2023 -->
+<div class="flex flex-1 items-end justify-center gap-0.5">
+<div class="w-2 bg-primary rounded-t-sm" style="height: 80%"></div>
+<div class="w-2 bg-secondary rounded-t-sm" style="height: 70%"></div>
+<div class="w-2 bg-tertiary rounded-t-sm" style="height: 65%"></div>
+</div>
+<!-- Group 3: 2024 (Forecast) -->
+<div class="flex flex-1 items-end justify-center gap-0.5 relative">
+<div class="w-2 bg-primary rounded-t-sm shadow-[0_-4px_8px_rgba(120,220,119,0.3)]" style="height: 92%"></div>
+<div class="w-2 bg-secondary rounded-t-sm opacity-50" style="height: 85%"></div>
+<div class="w-2 bg-tertiary rounded-t-sm opacity-50" style="height: 78%"></div>
+</div>
+</div>
+<div class="flex justify-between text-[10px] text-outline font-bold px-2">
+<span>2022</span>
+<span>2023</span>
+<span>2024 (E)</span>
+</div>
+<div class="grid grid-cols-3 gap-2 pt-2">
+<div class="text-center">
+<div class="w-2 h-2 rounded-full bg-primary mx-auto mb-1"></div>
+<p class="text-[8px] text-outline font-bold uppercase">4-WK</p>
+</div>
+<div class="text-center">
+<div class="w-2 h-2 rounded-full bg-secondary mx-auto mb-1"></div>
+<p class="text-[8px] text-outline font-bold uppercase">8-WK</p>
+</div>
+<div class="text-center">
+<div class="w-2 h-2 rounded-full bg-tertiary mx-auto mb-1"></div>
+<p class="text-[8px] text-outline font-bold uppercase">12-WK</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Weather Summary Widget -->
+<section class="bg-surface-container-low rounded-xl p-6">
+<h3 class="text-sm font-bold text-white mb-4 uppercase tracking-tight">Environmental Context</h3>
+<div class="grid grid-cols-2 gap-4">
+<!-- Temp -->
+<div class="bg-surface-container p-3 rounded-lg border border-outline-variant/10">
+<p class="text-[10px] text-outline font-bold uppercase mb-1">Temperature</p>
+<div class="flex justify-between items-end">
+<p class="text-lg font-black text-white">29.4°C</p>
+<div class="w-12 h-6 flex items-end gap-0.5">
+<div class="flex-1 bg-outline-variant/20 h-2"></div>
+<div class="flex-1 bg-outline-variant/20 h-4"></div>
+<div class="flex-1 bg-primary h-5"></div>
+<div class="flex-1 bg-primary h-6"></div>
+</div>
+</div>
+</div>
+<!-- Rainfall -->
+<div class="bg-surface-container p-3 rounded-lg border border-outline-variant/10">
+<p class="text-[10px] text-outline font-bold uppercase mb-1">Rainfall</p>
+<div class="flex justify-between items-end">
+<p class="text-lg font-black text-tertiary">82mm</p>
+<div class="w-12 h-6 flex items-end gap-0.5">
+<div class="flex-1 bg-tertiary h-2"></div>
+<div class="flex-1 bg-tertiary h-3"></div>
+<div class="flex-1 bg-tertiary h-4"></div>
+<div class="flex-1 bg-tertiary/20 h-6"></div>
+</div>
+</div>
+</div>
+<!-- Humidity -->
+<div class="bg-surface-container p-3 rounded-lg border border-outline-variant/10">
+<p class="text-[10px] text-outline font-bold uppercase mb-1">Humidity</p>
+<div class="flex justify-between items-end">
+<p class="text-lg font-black text-white">71%</p>
+<div class="w-12 h-6 flex items-end gap-0.5">
+<div class="flex-1 bg-primary h-4"></div>
+<div class="flex-1 bg-primary h-5"></div>
+<div class="flex-1 bg-primary h-4"></div>
+<div class="flex-1 bg-primary h-3"></div>
+</div>
+</div>
+</div>
+<!-- ET -->
+<div class="bg-surface-container p-3 rounded-lg border border-outline-variant/10">
+<p class="text-[10px] text-outline font-bold uppercase mb-1">Evapo-T (ET)</p>
+<div class="flex justify-between items-end">
+<p class="text-lg font-black text-white">4.2mm</p>
+<div class="w-12 h-6 flex items-end gap-0.5">
+<div class="flex-1 bg-outline-variant/20 h-2"></div>
+<div class="flex-1 bg-primary h-4"></div>
+<div class="flex-1 bg-primary h-3"></div>
+<div class="flex-1 bg-primary h-4"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 p-3 bg-secondary-container/20 rounded-lg border border-secondary-container/40 flex gap-3 items-center">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+<p class="text-[10px] text-secondary font-medium leading-tight">Optimal conditions for rhizome maturation. Soil moisture index remains stable at 0.68.</p>
+</div>
+</section>
+<!-- Map/Location Context -->
+<div class="rounded-xl overflow-hidden h-40 relative group">
+<img class="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" data-alt="Satellite thermal map view of agricultural fields in Erode Tamil Nadu showing health variations" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUQ_nlYZ-JcMwT8t1T8P7gyVKC21THhWXfONEk71nK3TeSe40H7v6EFKZjjqzCEqPIvlA_CaVtVU1F04rFZHuh5jJVmZ1bqAvIu1p2VladrFExmnoqY8q-bOiKm4wv9eQpXZN9DrwM16e2K7BEhHuX8KDxSG8Oo_1AqXRG5zHGE9XA1E4Erf4iayI7FoJfT9D35us3vqYH2XJVk8b3AdE-_IVzXcpRICu1_PpU0n3A3x4cUZUCS2XQvlJglJ1j_1U5oMb9bdVDCkQ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<p class="text-xs font-bold text-white">Erode Cluster — Tamil Nadu</p>
+<p class="text-[10px] text-outline">Geo-Research Node ID: TN-ER-04</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Detailed Forecast Logic Overlay (Subtle) -->
+<div class="border-t border-outline-variant/10 pt-6 flex flex-wrap gap-4 items-center">
+<span class="text-[10px] text-outline font-bold uppercase tracking-widest">Research Parameters:</span>
+<span class="bg-surface-container text-on-surface-variant text-[10px] px-3 py-1 rounded-full border border-outline-variant/20">Alpha: 0.14</span>
+<span class="bg-surface-container text-on-surface-variant text-[10px] px-3 py-1 rounded-full border border-outline-variant/20">Beta: 0.22</span>
+<span class="bg-surface-container text-on-surface-variant text-[10px] px-3 py-1 rounded-full border border-outline-variant/20">Gamma: 0.35</span>
+<span class="bg-surface-container text-on-surface-variant text-[10px] px-3 py-1 rounded-full border border-outline-variant/20">p,d,q: (2,1,2)</span>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Only on relevant main views) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-2xl shadow-2xl flex items-center justify-center hover:scale-105 transition-transform active:scale-95 z-50">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'wght' 600;">add_chart</span>
+</button>
+</body></html>

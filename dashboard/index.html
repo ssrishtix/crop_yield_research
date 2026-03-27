@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriDash TN — Tamil Nadu Crop Yield Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #10141a;
+            color: #dfe2eb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero {
+            width: 100%;
+            padding: 60px 40px 40px;
+            text-align: center;
+            background: linear-gradient(180deg, #1B4332 0%, #10141a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(76, 175, 80, 0.08) 0%, transparent 60%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #78dc77 0%, #4CAF50 50%, #ffb95f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: #becab9;
+            margin-top: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero .badge-row {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+        .badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .badge.green { background: rgba(76, 175, 80, 0.2); color: #78dc77; border: 1px solid rgba(76, 175, 80, 0.3); }
+        .badge.amber { background: rgba(245, 158, 11, 0.2); color: #ffb95f; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge.teal { background: rgba(0, 188, 212, 0.2); color: #4DD0E1; border: 1px solid rgba(0, 188, 212, 0.3); }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .card {
+            background: #1c2026;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(76, 175, 80, 0.1);
+        }
+        .card:hover .card-icon {
+            transform: scale(1.15);
+        }
+
+        .card-header {
+            padding: 28px 28px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            transition: transform 0.35s ease;
+        }
+        .card-icon.green { background: linear-gradient(135deg, #4CAF50, #78dc77); }
+        .card-icon.amber { background: linear-gradient(135deg, #D97706, #ffb95f); }
+        .card-icon.teal { background: linear-gradient(135deg, #0097A7, #4DD0E1); }
+        .card-icon.red { background: linear-gradient(135deg, #C62828, #EF5350); }
+        .card-icon.purple { background: linear-gradient(135deg, #6A1B9A, #AB47BC); }
+        .card-icon.blue { background: linear-gradient(135deg, #1565C0, #42A5F5); }
+
+        .card-info h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+        .card-info p {
+            font-size: 0.85rem;
+            color: #899484;
+            line-height: 1.5;
+        }
+
+        .card-stats {
+            padding: 0 28px 24px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+        .stat {
+            display: flex;
+            flex-direction: column;
+        }
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #78dc77;
+        }
+        .stat-value.amber { color: #ffb95f; }
+        .stat-value.white { color: #ffffff; }
+        .stat-label {
+            font-size: 0.7rem;
+            color: #899484;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .card-footer {
+            padding: 16px 28px;
+            border-top: 1px solid #262a31;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .card-footer span {
+            font-size: 0.8rem;
+            color: #78dc77;
+            font-weight: 600;
+        }
+        .card-footer .arrow {
+            color: #78dc77;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+        .card:hover .card-footer .arrow {
+            transform: translateX(4px);
+        }
+
+        .footer {
+            padding: 40px;
+            text-align: center;
+            color: #899484;
+            font-size: 0.8rem;
+        }
+        .footer a {
+            color: #78dc77;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>🌾 AgriDash TN</h1>
+        <p>Tamil Nadu Agricultural Analytics Dashboard — Crop Yield Research 2012–2024</p>
+        <div class="badge-row">
+            <span class="badge green">Turmeric — Erode</span>
+            <span class="badge amber">Tapioca — Salem</span>
+            <span class="badge teal">Kharif 2024</span>
+        </div>
+    </div>
+
+    <div class="grid">
+        <a href="overview.html" class="card">
+            <div class="card-header">
+                <div class="card-icon green">📊</div>
+                <div class="card-info">
+                    <h3>Overview Dashboard</h3>
+                    <p>KPI row, ARIMA forecast chart, RF yield predictions, profit card & weather widget — all on one screen</p>
+                </div>
+            </div>
+            <div class="card-stats">
+                <div class="stat"><span class="stat-value">₹14,474</span><span class="stat-label">Modal Price /q</span></div>
+                <div class="stat"><span class="stat-value">7,442</span><span class="stat-label">Yield kg/ha</span></div>
+                <div class="stat"><span class="stat-value amber">₹1,24,800</span><span class="stat-label">Est. Profit/ha</span></div>
+            </div>
+            <div class="card-footer"><span>View Dashboard</span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="price_forecast.html" class="card">
+            <div class="card-header">
+                <div class="card-icon amber">📈</div>
+                <div class="card-info">
+                    <h3>Price Forecast</h3>
+                    <p>30-day ARIMA price forecast with 95% confidence interval, seasonal calendar & selling strategy</p>
+                </div>
+            </div>
+            <div class="card-stats">
+                <div class="stat"><span class="stat-value">5.2%</span><span class="stat-label">ARIMA MAPE</span></div>
+                <div class="stat"><span class="stat-value amber">₹632</span><span class="stat-label">MAE /quintal</span></div>
+                <div class="stat"><span class="stat-value white">30 days</span><span class="stat-label">Horizon</span></div>
+            </div>
+            <div class="card-footer"><span>View Forecast</span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="yield_prediction.html" class="card">
+            <div class="card-header">
+                <div class="card-icon teal">🌱</div>
+                <div class="card-info">
+                    <h3>Yield Prediction</h3>
+                    <p>Random Forest multi-horizon predictions (4/8/12 week), feature importance & cross-region generalization</p>
+                </div>
+            </div>
+            <div class="card-stats">
+                <div class="stat"><span class="stat-value">1.56%</span><span class="stat-label">RF MAPE</span></div>
+                <div class="stat"><span class="stat-value amber">126.79</span><span class="stat-label">MAE kg/ha</span></div>
+                <div class="stat"><span class="stat-value white">2016–2024</span><span class="stat-label">Period</span></div>
+            </div>
+            <div class="card-footer"><span>View Predictions</span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="profit_estimator.html" class="card">
+            <div class="card-header">
+                <div class="card-icon purple">💰</div>
+                <div class="card-info">
+                    <h3>Profit Estimator</h3>
+                    <p>Revenue forecasts, profit range visualization, scenario analysis & seasonal selling advisory</p>
+                </div>
+            </div>
+            <div class="card-stats">
+                <div class="stat"><span class="stat-value">₹2,14,656</span><span class="stat-label">Revenue /ha</span></div>
+                <div class="stat"><span class="stat-value">58.1%</span><span class="stat-label">Margin</span></div>
+                <div class="stat"><span class="stat-value amber">+22.2%</span><span class="stat-label">Selling gain</span></div>
+            </div>
+            <div class="card-footer"><span>View Estimates</span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="weather_soil.html" class="card">
+            <div class="card-header">
+                <div class="card-icon blue">🌦️</div>
+                <div class="card-info">
+                    <h3>Weather & Soil</h3>
+                    <p>Climate metrics, soil health indicators, evapotranspiration analysis & agroclimatic suitability</p>
+                </div>
+            </div>
+            <div class="card-stats">
+                <div class="stat"><span class="stat-value white">29.4°C</span><span class="stat-label">Temperature</span></div>
+                <div class="stat"><span class="stat-value amber">82mm</span><span class="stat-label">Rainfall</span></div>
+                <div class="stat"><span class="stat-value">87/100</span><span class="stat-label">Suitability</span></div>
+            </div>
+            <div class="card-footer"><span>View Analysis</span><span class="arrow">→</span></div>
+        </a>
+
+        <a href="research_analysis.html" class="card">
+            <div class="card-header">
+                <div class="card-icon red">🔬</div>
+                <div class="card-info">
+                    <h3>Research Analysis</h3>
+                    <p>Model comparison, ablation study, seasonal patterns, price spread analysis & consolidated findings</p>
+                </div>
+            </div>
+            <div class="card-stats">
+                <div class="stat"><span class="stat-value">3 Models</span><span class="stat-label">Compared</span></div>
+                <div class="stat"><span class="stat-value amber">12 Years</span><span class="stat-label">Data Span</span></div>
+                <div class="stat"><span class="stat-value white">AGMARKNET</span><span class="stat-label">Source</span></div>
+            </div>
+            <div class="card-footer"><span>View Research</span><span class="arrow">→</span></div>
+        </a>
+    </div>
+
+    <div class="footer">
+        <p>AgriDash TN v2.0 · Tamil Nadu AGMARKNET · ICAR Erode · 2012–2024 Dataset</p>
+    </div>
+</body>
+</html>

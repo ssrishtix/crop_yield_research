@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Weather &amp; Soil Analysis | AgriDash TN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#c1ecd4",
+                        "outline-variant": "#3f4a3c",
+                        "on-surface-variant": "#becab9",
+                        "surface-container-low": "#181c22",
+                        "on-primary-fixed": "#002204",
+                        "secondary": "#a5d0b9",
+                        "primary": "#78dc77",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "primary-fixed-dim": "#78dc77",
+                        "on-secondary-fixed": "#002114",
+                        "on-error": "#690005",
+                        "surface-container": "#1c2026",
+                        "secondary-fixed-dim": "#a5d0b9",
+                        "surface-container-high": "#262a31",
+                        "surface-dim": "#10141a",
+                        "surface-tint": "#78dc77",
+                        "on-tertiary-container": "#4a2c00",
+                        "on-tertiary": "#472a00",
+                        "primary-container": "#4caf50",
+                        "primary-fixed": "#94f990",
+                        "on-secondary": "#0e3727",
+                        "surface-container-lowest": "#0a0e14",
+                        "inverse-on-surface": "#2d3137",
+                        "surface-container-highest": "#31353c",
+                        "surface": "#10141a",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-primary": "#00390a",
+                        "surface-variant": "#31353c",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-surface": "#dfe2eb",
+                        "on-secondary-container": "#97c2ab",
+                        "tertiary": "#ffb95f",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#006e1c",
+                        "on-background": "#dfe2eb",
+                        "surface-bright": "#353940",
+                        "background": "#10141a",
+                        "on-primary-fixed-variant": "#005313",
+                        "on-primary-container": "#003c0b",
+                        "tertiary-container": "#d88a00",
+                        "on-secondary-fixed-variant": "#274e3d",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-surface": "#dfe2eb",
+                        "outline": "#899484",
+                        "secondary-container": "#29513f"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-panel {
+            background: rgba(49, 53, 60, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .chart-grid {
+            background-image: radial-gradient(circle at 1px 1px, #3f4a3c 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-secondary-container flex flex-col py-6 shadow-2xl z-50">
+<div class="px-6 mb-10">
+<h1 class="text-white font-black tracking-tight text-xl">AgriDash TN</h1>
+<p class="text-on-surface-variant text-xs opacity-80 mt-1">Agricultural Analytics</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container/20 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-sm">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container/20 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="text-sm">Price Forecast</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container/20 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="Bar_chart">bar_chart</span>
+<span class="text-sm">Yield Prediction</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container/20 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="text-sm">Profit Estimator</span>
+</a>
+<!-- Active State -->
+<a class="flex items-center gap-3 px-6 py-3 text-primary border-l-4 border-primary bg-surface-container/30 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="wb_sunny" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+<span class="text-sm font-semibold">Weather &amp; Soil</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:bg-surface-container/20 hover:text-white transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="science">science</span>
+<span class="text-sm">Research Analysis</span>
+</a>
+</nav>
+<div class="px-6 pt-6 mt-auto border-t border-white/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Tamil Nadu State Emblem in high contrast white and green minimalist style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZtc_QGyZxeAMqjZs1ORnJasCidSylv6IO9fcX-MsGyHE-rpYRCMhukJnl3EoH3WN_wdtnddmGvnDZlgGAcMoRy-zO7AUF3W4zrd_qJxYQ0KTv-243Q4lx2Z9ZKacCkZZ122rQVy8BayPX49gbhzfGZvmTwgR1E0kh6JZJ0S-aCZ-6eo9HOsrjjjfhHuYzoME_VAbD1UGuMhXd_mxu7i9FPgdMgxZ0yFG2PlSLMQ24XpYK8Gxu17qW92OqyAwmrm3V_ojhgHZtak4"/>
+</div>
+<div class="text-xs">
+<p class="text-white font-medium">Tamil Nadu State</p>
+<p class="text-on-surface-variant">Admin Access</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen bg-surface flex flex-col">
+<!-- Top App Bar -->
+<header class="flex justify-between items-center w-full px-8 py-4 bg-surface-container-low sticky top-0 z-40">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+<span class="font-inter text-sm">Erode, Tamil Nadu</span>
+</div>
+<div class="h-4 w-px bg-outline-variant/30"></div>
+<div class="text-on-surface-variant text-sm flex items-center gap-2">
+<span>Weather &amp; Soil</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="px-3 py-1 rounded-full bg-tertiary/10 text-tertiary text-xs font-bold tracking-wide uppercase">Kharif 2024</span>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    ER
+                </div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="p-8 space-y-8 max-w-[1600px] mx-auto w-full">
+<!-- Page Heading -->
+<section>
+<h2 class="text-3xl font-extrabold text-white tracking-tight">Weather &amp; Soil Analysis</h2>
+<p class="text-on-surface-variant mt-1 text-sm">Erode District · Current Kharif Season · Agroclimatic Zone IV</p>
+</section>
+<!-- Row 1: KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-surface-container p-5 rounded-xl transition-all duration-300 hover:bg-surface-container-high group">
+<div class="flex justify-between items-start mb-4">
+<p class="text-outline text-xs font-bold tracking-widest uppercase">Temperature</p>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="thermostat">thermostat</span>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<p class="text-2xl font-bold text-white">29.4°C</p>
+<p class="text-[10px] text-primary mt-1 font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="check_circle">check_circle</span>
+                                NORMAL RANGE
+                            </p>
+</div>
+<div class="h-8 w-20 flex items-end gap-[2px]">
+<div class="h-[40%] w-full bg-primary/20 rounded-t-[1px]"></div>
+<div class="h-[60%] w-full bg-primary/20 rounded-t-[1px]"></div>
+<div class="h-[50%] w-full bg-primary/40 rounded-t-[1px]"></div>
+<div class="h-[80%] w-full bg-primary/60 rounded-t-[1px]"></div>
+<div class="h-[70%] w-full bg-primary rounded-t-[1px]"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-5 rounded-xl transition-all duration-300 hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-4">
+<p class="text-outline text-xs font-bold tracking-widest uppercase">Rainfall</p>
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="rainy">rainy</span>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<p class="text-2xl font-bold text-white">82mm</p>
+<p class="text-[10px] text-tertiary mt-1 font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="trending_up">trending_up</span>
+                                +18% AVG
+                            </p>
+</div>
+<div class="h-8 w-20 flex items-end gap-[2px]">
+<div class="h-[30%] w-full bg-tertiary/20 rounded-t-[1px]"></div>
+<div class="h-[40%] w-full bg-tertiary/20 rounded-t-[1px]"></div>
+<div class="h-[60%] w-full bg-tertiary/40 rounded-t-[1px]"></div>
+<div class="h-[90%] w-full bg-tertiary/60 rounded-t-[1px]"></div>
+<div class="h-[100%] w-full bg-tertiary rounded-t-[1px]"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-5 rounded-xl transition-all duration-300 hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-4">
+<p class="text-outline text-xs font-bold tracking-widest uppercase">Humidity</p>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="humidity_low">humidity_low</span>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<p class="text-2xl font-bold text-white">71%</p>
+<p class="text-[10px] text-primary mt-1 font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]" data-icon="spa">spa</span>
+                                OPTIMAL
+                            </p>
+</div>
+<div class="h-8 w-20 flex items-end gap-[2px]">
+<div class="h-[60%] w-full bg-primary/20 rounded-t-[1px]"></div>
+<div class="h-[70%] w-full bg-primary/40 rounded-t-[1px]"></div>
+<div class="h-[65%] w-full bg-primary/60 rounded-t-[1px]"></div>
+<div class="h-[75%] w-full bg-primary rounded-t-[1px]"></div>
+<div class="h-[72%] w-full bg-primary rounded-t-[1px]"></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-5 rounded-xl transition-all duration-300 hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-4">
+<p class="text-outline text-xs font-bold tracking-widest uppercase">Evapotranspiration</p>
+<span class="material-symbols-outlined text-on-surface-variant text-sm" data-icon="eco">eco</span>
+</div>
+<div class="flex items-end justify-between">
+<div>
+<p class="text-2xl font-bold text-white">4.2<span class="text-xs font-normal text-on-surface-variant ml-1">mm/day</span></p>
+<p class="text-[10px] text-on-surface-variant mt-1 font-semibold">STABLE TRANSPIRATION</p>
+</div>
+<span class="material-symbols-outlined text-primary/40 text-4xl" data-icon="psychiatry">psychiatry</span>
+</div>
+</div>
+</div>
+<!-- Main Row (2 Columns) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left: Weather Chart -->
+<div class="lg:col-span-8 bg-surface-container rounded-xl p-6 flex flex-col h-[500px]">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h3 class="text-lg font-bold text-white">Monthly Weather Patterns — Erode 2024</h3>
+<p class="text-xs text-on-surface-variant">Comparative historical analysis with seasonal bands</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<span class="text-[10px] text-outline uppercase font-bold tracking-tighter">Temp</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-sm bg-secondary"></span>
+<span class="text-[10px] text-outline uppercase font-bold tracking-tighter">Rainfall</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 border-2 border-dashed border-tertiary rounded-full"></span>
+<span class="text-[10px] text-outline uppercase font-bold tracking-tighter">Humidity</span>
+</div>
+</div>
+</div>
+<div class="flex-1 relative chart-grid border-l border-b border-outline-variant/30 flex items-end px-4">
+<!-- Seasonal Bands -->
+<div class="absolute inset-y-0 left-0 w-1/4 bg-primary/5 border-r border-primary/10 flex items-start justify-center pt-2">
+<span class="text-[9px] font-black text-primary uppercase opacity-40">Summer</span>
+</div>
+<div class="absolute inset-y-0 left-1/4 w-1/2 bg-tertiary/5 border-r border-tertiary/10 flex items-start justify-center pt-2">
+<span class="text-[9px] font-black text-tertiary uppercase opacity-40 tracking-[0.5em]">Kharif Season</span>
+</div>
+<div class="absolute inset-y-0 right-0 w-1/4 bg-secondary/5 flex items-start justify-center pt-2">
+<span class="text-[9px] font-black text-secondary uppercase opacity-40">Rabi</span>
+</div>
+<!-- Mock Data Bars (Rainfall) -->
+<div class="w-full flex justify-around items-end h-full pb-4">
+<div class="h-[15%] w-6 bg-secondary/40 rounded-t-sm"></div>
+<div class="h-[20%] w-6 bg-secondary/40 rounded-t-sm"></div>
+<div class="h-[35%] w-6 bg-secondary/40 rounded-t-sm"></div>
+<div class="h-[45%] w-6 bg-secondary/60 rounded-t-sm"></div>
+<div class="h-[65%] w-6 bg-secondary/80 rounded-t-sm"></div>
+<div class="h-[85%] w-6 bg-secondary rounded-t-sm relative">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-bold text-white bg-surface-bright px-2 py-0.5 rounded-sm">Peak</div>
+</div>
+<div class="h-[75%] w-6 bg-secondary rounded-t-sm"></div>
+<div class="h-[60%] w-6 bg-secondary/80 rounded-t-sm"></div>
+<div class="h-[40%] w-6 bg-secondary/60 rounded-t-sm"></div>
+<div class="h-[30%] w-6 bg-secondary/40 rounded-t-sm"></div>
+<div class="h-[20%] w-6 bg-secondary/40 rounded-t-sm"></div>
+<div class="h-[10%] w-6 bg-secondary/20 rounded-t-sm"></div>
+</div>
+<!-- Mock Line (Temp) -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewbox="0 0 800 400">
+<path d="M 50,300 Q 150,280 250,220 T 450,150 T 650,220 T 750,280" fill="none" stroke="#78dc77" stroke-width="3"></path>
+<path d="M 50,250 Q 150,240 250,180 T 450,120 T 650,180 T 750,230" fill="none" stroke="#ffb95f" stroke-dasharray="8 4" stroke-width="2"></path>
+</svg>
+</div>
+<div class="flex justify-around mt-4 px-4">
+<span class="text-[10px] font-bold text-outline">JAN</span>
+<span class="text-[10px] font-bold text-outline">FEB</span>
+<span class="text-[10px] font-bold text-outline">MAR</span>
+<span class="text-[10px] font-bold text-outline">APR</span>
+<span class="text-[10px] font-bold text-outline">MAY</span>
+<span class="text-[10px] font-bold text-white">JUN</span>
+<span class="text-[10px] font-bold text-white">JUL</span>
+<span class="text-[10px] font-bold text-outline">AUG</span>
+<span class="text-[10px] font-bold text-outline">SEP</span>
+<span class="text-[10px] font-bold text-outline">OCT</span>
+<span class="text-[10px] font-bold text-outline">NOV</span>
+<span class="text-[10px] font-bold text-outline">DEC</span>
+</div>
+</div>
+<!-- Right: Soil Conditions -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container rounded-xl p-6 h-full flex flex-col">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary p-2 bg-primary/10 rounded-lg" data-icon="grass">grass</span>
+<div>
+<h3 class="text-lg font-bold text-white">Soil Conditions</h3>
+<p class="text-xs text-on-surface-variant">Profile: Red Laterite</p>
+</div>
+</div>
+<div class="space-y-6 flex-1">
+<!-- pH Scale -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-outline uppercase font-bold">Soil pH</span>
+<span class="text-primary font-bold">6.2 (Optimal)</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="h-full bg-error" style="width: 20%"></div>
+<div class="h-full bg-tertiary" style="width: 20%"></div>
+<div class="h-full bg-primary" style="width: 30%"></div>
+<div class="h-full bg-secondary" style="width: 30%"></div>
+</div>
+<div class="relative w-full h-2">
+<div class="absolute top-[-12px] left-[45%] w-0.5 h-3 bg-white"></div>
+</div>
+</div>
+<!-- Organic Matter -->
+<div class="flex justify-between items-center bg-surface-container-high/50 p-4 rounded-lg">
+<div>
+<p class="text-[10px] text-outline font-bold uppercase">Organic Matter</p>
+<p class="text-xl font-bold text-white">1.8%</p>
+</div>
+<div class="px-2 py-1 rounded bg-tertiary/10 text-tertiary text-[10px] font-bold">BELOW AVG</div>
+</div>
+<!-- NPK Status -->
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-surface-container-high p-3 rounded-lg text-center">
+<p class="text-[10px] text-outline font-bold">N</p>
+<p class="text-xs font-bold text-tertiary">MED</p>
+</div>
+<div class="bg-surface-container-high p-3 rounded-lg text-center border border-error/20">
+<p class="text-[10px] text-outline font-bold">P</p>
+<p class="text-xs font-bold text-error uppercase">Low</p>
+</div>
+<div class="bg-surface-container-high p-3 rounded-lg text-center">
+<p class="text-[10px] text-outline font-bold">K</p>
+<p class="text-xs font-bold text-primary uppercase">High</p>
+</div>
+</div>
+<!-- Soil Moisture -->
+<div class="space-y-3 pt-2">
+<div class="flex justify-between text-xs items-center">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="opacity">opacity</span>
+<span class="text-outline uppercase font-bold">Soil Moisture</span>
+</div>
+<span class="text-primary font-bold">38%</span>
+</div>
+<div class="h-4 w-full bg-surface-container-high rounded-full p-1">
+<div class="h-full bg-primary rounded-full" style="width: 38%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Evapotranspiration Panel (Full-width) -->
+<section class="bg-surface-container rounded-xl overflow-hidden">
+<div class="p-6 border-b border-outline-variant/10 flex justify-between items-center">
+<div>
+<h3 class="text-lg font-bold text-white">Evapotranspiration &amp; Irrigation Need</h3>
+<p class="text-xs text-on-surface-variant">Daily water loss (ET0) vs Crop Requirement (ETc)</p>
+</div>
+<div class="bg-tertiary/10 border border-tertiary/20 px-4 py-2 rounded-lg flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="warning">warning</span>
+<p class="text-xs font-bold text-tertiary">Recommendation: <span class="text-white ml-2">Critical irrigation window: Jan–Mar (deficit ~45mm)</span></p>
+</div>
+</div>
+<div class="p-8 h-64 chart-grid flex items-end justify-between gap-4">
+<!-- Bar Groups -->
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[40%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[35%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">JAN</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[50%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[65%] bg-tertiary/80 rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">FEB</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[45%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[75%] bg-tertiary rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">MAR</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[60%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[55%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">APR</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[80%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[70%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">MAY</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[70%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[60%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">JUN</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[40%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[35%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">JUL</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[50%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[45%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">AUG</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[55%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[50%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">SEP</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[60%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[55%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">OCT</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[40%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[35%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">NOV</span>
+</div>
+<div class="flex-1 flex flex-col justify-end gap-2 group cursor-pointer">
+<div class="flex items-end gap-1 h-32">
+<div class="w-1/2 h-[30%] bg-primary rounded-t-sm"></div>
+<div class="w-1/2 h-[25%] bg-outline-variant rounded-t-sm"></div>
+</div>
+<span class="text-[9px] text-outline text-center">DEC</span>
+</div>
+</div>
+</section>
+<!-- Bottom Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Agroclimatic Suitability -->
+<div class="bg-surface-container rounded-xl p-6 relative overflow-hidden group">
+<div class="relative z-10">
+<h3 class="text-lg font-bold text-white mb-6">Agroclimatic Suitability</h3>
+<div class="flex items-center gap-12">
+<!-- Mock Radar Chart -->
+<div class="w-48 h-48 relative">
+<svg class="w-full h-full rotate-[-18deg]" viewbox="0 0 100 100">
+<circle cx="50" cy="50" fill="none" r="45" stroke="#3f4a3c" stroke-dasharray="2" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="30" stroke="#3f4a3c" stroke-dasharray="2" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="15" stroke="#3f4a3c" stroke-dasharray="2" stroke-width="0.5"></circle>
+<!-- Axes -->
+<line stroke="#3f4a3c" stroke-width="0.5" x1="50" x2="50" y1="5" y2="95"></line>
+<line stroke="#3f4a3c" stroke-width="0.5" x1="5" x2="95" y1="50" y2="50"></line>
+<!-- Suitability Area -->
+<polygon fill="rgba(120, 220, 119, 0.2)" points="50,15 85,50 65,85 15,50 35,15" stroke="#78dc77" stroke-width="2"></polygon>
+<polygon fill="none" points="50,10 90,50 70,90 10,50 30,10" stroke="#ffb95f" stroke-dasharray="3" stroke-width="1"></polygon>
+</svg>
+<div class="absolute top-0 left-1/2 -translate-x-1/2 text-[8px] text-outline uppercase font-black">Temp</div>
+<div class="absolute right-0 top-1/2 -translate-y-1/2 text-[8px] text-outline uppercase font-black">Humidity</div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 text-[8px] text-outline uppercase font-black">Sunlight</div>
+<div class="absolute left-0 top-1/2 -translate-y-1/2 text-[8px] text-outline uppercase font-black">Rainfall</div>
+</div>
+<div class="space-y-4 flex-1">
+<div>
+<p class="text-xs text-on-surface-variant mb-1">Crop Suitability Index</p>
+<div class="flex items-end gap-2">
+<span class="text-4xl font-black text-primary">87</span>
+<span class="text-lg font-bold text-on-surface-variant mb-1">/100</span>
+</div>
+<p class="text-[10px] font-bold text-primary tracking-widest uppercase mt-2">Highly Suitable</p>
+</div>
+<div class="h-px bg-outline-variant/20"></div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<p class="text-xs text-white">Ideal for <span class="font-bold">Turmeric</span></p>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-3 h-3 rounded-full bg-tertiary"></div>
+<p class="text-xs text-white">Current Erode Conditions</p>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-[160px]" data-icon="nature_people">nature_people</span>
+</div>
+</div>
+<!-- Analysis Summary -->
+<div class="bg-surface-container rounded-xl p-6 border-l-4 border-primary">
+<h3 class="text-lg font-bold text-white mb-4">Research Insight</h3>
+<div class="space-y-4">
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            The current soil profile in <span class="text-white font-semibold">Erode</span> shows high potassium content but requires phosphoric intervention for the upcoming flowering stage. Rainfall is trending <span class="text-primary font-bold">18% above historic norms</span>, which mitigates early summer moisture stress.
+                        </p>
+<div class="bg-surface-container-high p-4 rounded-lg">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-sm" data-icon="lightbulb">lightbulb</span>
+<span class="text-xs font-bold text-white uppercase tracking-wider">Agronomist Note</span>
+</div>
+<p class="text-xs text-on-surface-variant">
+                                Recommended nitrogen application during the next low-humidity window to maximize root absorption. Monitor pest activity if humidity stays above 75% for &gt;48h.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto p-8 text-center border-t border-outline-variant/10">
+<p class="text-outline text-xs tracking-widest font-bold uppercase">AgriDash TN v4.2.0 • Data refreshed 14m ago</p>
+</footer>
+</main>
+</body></html>
